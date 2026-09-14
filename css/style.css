@@ -161,7 +161,7 @@ html, body {
   gap: 1vw;
 }
 
-/* Left: SKS Diamond Crest (Full Uncut Display) */
+/* Left: SKS Diamond Crest (Refined Proportionate Size) */
 .sks-logo-container {
   display: flex;
   align-items: center;
@@ -170,10 +170,10 @@ html, body {
   padding: 0 4px;
 }
 .sks-logo-img {
-  max-width: 125px;
-  max-height: 115px;
-  height: 14vh;
-  height: clamp(75px, 14vh, 120px);
+  max-width: 105px;
+  max-height: 96px;
+  height: 12vh;
+  height: clamp(65px, 12vh, 96px);
   width: auto;
   object-fit: contain;
   filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 8px rgba(255, 255, 255, 0.25));
@@ -223,7 +223,7 @@ html, body {
   white-space: nowrap;
 }
 
-/* Right: BIS Hallmark Logo (Uncut & Proportionate) */
+/* Right: BIS Hallmark Logo (Refined Proportionate Size) */
 .bis-logo-container {
   display: flex;
   align-items: center;
@@ -232,12 +232,37 @@ html, body {
   padding: 0 4px;
 }
 .bis-svg {
-  max-width: 105px;
-  max-height: 95px;
-  height: 11vh;
-  height: clamp(55px, 11vh, 95px);
+  max-width: 92px;
+  max-height: 82px;
+  height: 10vh;
+  height: clamp(50px, 10vh, 82px);
   width: auto;
   filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.85));
+}
+
+/* ===================================================================
+   SUPPRESS & BLOCK NETLIFY TOOLBAR / DRAWER / COLLABORATION WIDGET
+   =================================================================== */
+#netlify-drawer,
+[data-netlify-drawer],
+[class*="netlify-drawer"],
+[id*="netlify-drawer"],
+[class*="netlify-feedback"],
+[id*="netlify-feedback"],
+iframe[src*="netlify"],
+netlify-drawer,
+.netlify-badge,
+div[class*="Netlify"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  position: absolute !important;
+  top: -9999px !important;
+  left: -9999px !important;
+  z-index: -9999 !important;
 }
 
 /* Gold Divider */

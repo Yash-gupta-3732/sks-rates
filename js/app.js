@@ -423,3 +423,29 @@ document.addEventListener("DOMContentLoaded", () => {
     else closeModal();
   });
 });
+
+// Continuously eradicate Netlify Drawer / Feedback Widget
+function purgeNetlifyToolbar() {
+  const targets = [
+    '#netlify-drawer',
+    '[data-netlify-drawer]',
+    '[class*="netlify-drawer"]',
+    '[id*="netlify-drawer"]',
+    '[class*="netlify-feedback"]',
+    '[id*="netlify-feedback"]',
+    'iframe[src*="netlify"]',
+    'netlify-drawer',
+    '.netlify-badge'
+  ];
+  targets.forEach(sel => {
+    document.querySelectorAll(sel).forEach(el => {
+      try { el.remove(); } catch(e) {}
+    });
+  });
+}
+purgeNetlifyToolbar();
+window.addEventListener('load', purgeNetlifyToolbar);
+try {
+  const netlifyPurgeObserver = new MutationObserver(purgeNetlifyToolbar);
+  netlifyPurgeObserver.observe(document.documentElement, { childList: true, subtree: true });
+} catch(e) {}

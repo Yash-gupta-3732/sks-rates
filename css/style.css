@@ -45,12 +45,13 @@ html, body {
 .tv-screen-wrapper {
   width: 100vw;
   height: 100vh;
-  max-width: 177.78vh; /* 16:9 ratio lock */
-  max-height: 56.25vw;
+  max-width: 100vw;
+  max-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 0.5vh 0.8vw;
+  box-sizing: border-box;
 }
 
 /* Realistic Hardware Enclosure */
@@ -149,26 +150,34 @@ html, body {
    HEADER SECTION: SKS Logo (Large) | Shop Name (Large) | BIS Logo (Large)
    =================================================================== */
 .board-header {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  align-items: center;
+  display: flex;
   justify-content: space-between;
+  align-items: center;
   width: 100%;
   flex-shrink: 0;
-  padding: 0.3vh 0;
+  padding: 0.2vh 0;
   position: relative;
   z-index: 2;
-  gap: 2vw;
+  gap: 1vw;
 }
 
-/* Left: SKS Diamond Crest (Extra Large, Majestic & Prominent) */
+/* Left: SKS Diamond Crest (Controlled & Constrained) */
 .sks-logo-container {
   display: flex;
   align-items: center;
   justify-content: center;
+  max-width: 130px;
+  max-height: 120px;
+  width: 12vw;
+  height: 14vh;
+  flex-shrink: 0;
+  overflow: hidden;
 }
 .sks-logo-img {
-  height: clamp(92px, 16vh, 160px);
+  max-width: 100%;
+  max-height: 100%;
+  height: 13vh;
+  height: clamp(65px, 13vh, 120px);
   width: auto;
   object-fit: contain;
   filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 8px rgba(255, 255, 255, 0.25));
@@ -182,16 +191,19 @@ html, body {
   align-items: center;
   justify-content: center;
   min-width: 0;
+  flex: 1;
   padding: 0 0.8vw;
 }
 
 .shop-name-hindi {
-  font-size: clamp(1.8rem, 3.8vw, 3.8rem);
+  font-size: 2.2rem;
+  font-size: 3.2vw;
+  font-size: clamp(1.5rem, 3.2vw, 2.9rem);
   font-weight: 900;
   letter-spacing: 2px;
   line-height: 1.15;
   color: #ffd700;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
   text-shadow: 
     0 1px 0 #ffe066,
     0 2px 0 #d4af37,
@@ -203,7 +215,9 @@ html, body {
 
 .shop-sub-title {
   color: #ffffff;
-  font-size: clamp(1rem, 1.8vw, 1.65rem);
+  font-size: 0.95rem;
+  font-size: 1.2vw;
+  font-size: clamp(0.75rem, 1.2vw, 1.2rem);
   font-weight: 800;
   letter-spacing: 1.4px;
   margin-top: 2px;
@@ -217,9 +231,18 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: center;
+  max-width: 110px;
+  max-height: 100px;
+  width: 10vw;
+  height: 12vh;
+  flex-shrink: 0;
+  overflow: hidden;
 }
 .bis-svg {
-  height: clamp(68px, 12vh, 125px);
+  max-width: 100%;
+  max-height: 100%;
+  height: 10vh;
+  height: clamp(50px, 10vh, 100px);
   width: auto;
   filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.85));
 }
@@ -290,7 +313,9 @@ html, body {
 
 .rate-header-title {
   color: #fff4a3;
-  font-size: clamp(1.15rem, 2vw, 1.9rem);
+  font-size: 1.4rem;
+  font-size: 2vw;
+  font-size: clamp(1.1rem, 2vw, 1.8rem);
   font-weight: 900;
   text-align: center;
   letter-spacing: 3.5px;
@@ -315,7 +340,9 @@ html, body {
   border: 1.5px solid var(--gold-border);
   padding: 0.6vh 0.8vw;
   color: #ffffff;
-  font-size: clamp(1.05rem, 1.8vw, 1.65rem);
+  font-size: 1.25rem;
+  font-size: 1.8vw;
+  font-size: clamp(1rem, 1.8vw, 1.6rem);
   font-weight: 900;
   letter-spacing: 2px;
   text-align: center;
@@ -368,7 +395,9 @@ html, body {
 }
 
 .led-digit-svg {
-  height: clamp(1.9rem, 4.6vh, 3.8rem);
+  height: 2.6rem;
+  height: 4.4vh;
+  height: clamp(1.8rem, 4.4vh, 3.4rem);
   width: auto;
   overflow: visible;
 }
@@ -380,6 +409,8 @@ html, body {
 
 
 .led-comma-svg {
+  width: 10px;
+  width: 1.1vw;
   width: clamp(8px, 1.1vw, 15px);
   margin: 0 1px;
 }
@@ -391,13 +422,17 @@ html, body {
 }
 
 .clock-led-digit {
-  height: clamp(1.5rem, 3.4vh, 2.8rem);
+  height: 2rem;
+  height: 3.2vh;
+  height: clamp(1.4rem, 3.2vh, 2.6rem);
   width: auto;
 }
 
 .clock-colon {
   width: 10px;
-  height: clamp(1.5rem, 3.4vh, 2.8rem);
+  height: 2rem;
+  height: 3.2vh;
+  height: clamp(1.4rem, 3.2vh, 2.6rem);
   display: inline-flex;
   flex-direction: column;
   justify-content: center;

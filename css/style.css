@@ -161,29 +161,25 @@ html, body {
   gap: 1vw;
 }
 
-/* Left: SKS Diamond Crest (Controlled & Constrained) */
+/* Left: SKS Diamond Crest (Full Uncut Display) */
 .sks-logo-container {
   display: flex;
   align-items: center;
   justify-content: center;
-  max-width: 130px;
-  max-height: 120px;
-  width: 12vw;
-  height: 14vh;
   flex-shrink: 0;
-  overflow: hidden;
+  padding: 0 4px;
 }
 .sks-logo-img {
-  max-width: 100%;
-  max-height: 100%;
-  height: 13vh;
-  height: clamp(65px, 13vh, 120px);
+  max-width: 125px;
+  max-height: 115px;
+  height: 14vh;
+  height: clamp(75px, 14vh, 120px);
   width: auto;
   object-fit: contain;
   filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 8px rgba(255, 255, 255, 0.25));
 }
 
-/* Center: Shop Title & Subtitle with generous font & margins */
+/* Center: Shop Title & Subtitle with enlarged, bold presence */
 .shop-branding {
   text-align: center;
   display: flex;
@@ -192,13 +188,13 @@ html, body {
   justify-content: center;
   min-width: 0;
   flex: 1;
-  padding: 0 0.8vw;
+  padding: 0 0.5vw;
 }
 
 .shop-name-hindi {
-  font-size: 2.2rem;
-  font-size: 3.2vw;
-  font-size: clamp(1.5rem, 3.2vw, 2.9rem);
+  font-size: 2.7rem;
+  font-size: 3.6vw;
+  font-size: clamp(1.8rem, 3.6vw, 3.4rem);
   font-weight: 900;
   letter-spacing: 2px;
   line-height: 1.15;
@@ -209,40 +205,37 @@ html, body {
     0 2px 0 #d4af37,
     0 3px 0 #b38600,
     0 4px 8px rgba(0, 0, 0, 0.95),
-    0 0 20px rgba(255, 215, 0, 0.5);
+    0 0 20px rgba(255, 215, 0, 0.55);
   white-space: nowrap;
 }
 
 .shop-sub-title {
   color: #ffffff;
-  font-size: 0.95rem;
-  font-size: 1.2vw;
-  font-size: clamp(0.75rem, 1.2vw, 1.2rem);
+  font-size: 1.1rem;
+  font-size: 1.35vw;
+  font-size: clamp(0.85rem, 1.35vw, 1.35rem);
   font-weight: 800;
-  letter-spacing: 1.4px;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
   margin-top: 2px;
   margin-bottom: 4px;
   text-shadow: 0 2px 5px rgba(0, 0, 0, 0.95);
   white-space: nowrap;
 }
 
-/* Right: BIS Hallmark Logo (Large, bold, prominent) */
+/* Right: BIS Hallmark Logo (Uncut & Proportionate) */
 .bis-logo-container {
   display: flex;
   align-items: center;
   justify-content: center;
-  max-width: 110px;
-  max-height: 100px;
-  width: 10vw;
-  height: 12vh;
   flex-shrink: 0;
-  overflow: hidden;
+  padding: 0 4px;
 }
 .bis-svg {
-  max-width: 100%;
-  max-height: 100%;
-  height: 10vh;
-  height: clamp(50px, 10vh, 100px);
+  max-width: 105px;
+  max-height: 95px;
+  height: 11vh;
+  height: clamp(55px, 11vh, 95px);
   width: auto;
   filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.85));
 }
@@ -280,7 +273,9 @@ html, body {
 
 .clock-label {
   color: #ffffff;
-  font-size: clamp(1.05rem, 1.8vw, 1.6rem);
+  font-size: 1.35rem;
+  font-size: 1.8vw;
+  font-size: clamp(1.1rem, 1.8vw, 1.6rem);
   font-weight: 800;
   letter-spacing: 1.8px;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
@@ -360,11 +355,13 @@ html, body {
 .rate-col-type {
   width: 28%;
   color: #ffffff;
-  font-size: clamp(1.1rem, 1.9vw, 1.75rem);
+  font-size: 1.4rem;
+  font-size: 2.1vw;
+  font-size: clamp(1.15rem, 2.1vw, 1.85rem);
   font-weight: 900;
-  letter-spacing: 1.2px;
+  letter-spacing: 1.4px;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
-  padding-left: 2vw !important;
+  padding-left: 1.8vw !important;
   white-space: nowrap;
 }
 
@@ -377,8 +374,8 @@ html, body {
 .rate-led-holder {
   background: #010204;
   border: 1.5px solid #242e40;
-  border-radius: 5px;
-  padding: 0.3vh 0.8vw;
+  border-radius: 6px;
+  padding: 0.35vh 0.7vw;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -395,9 +392,9 @@ html, body {
 }
 
 .led-digit-svg {
-  height: 2.6rem;
-  height: 4.4vh;
-  height: clamp(1.8rem, 4.4vh, 3.4rem);
+  height: 3.2rem;
+  height: 5.2vh;
+  height: clamp(2.2rem, 5.2vh, 3.8rem);
   width: auto;
   overflow: visible;
 }
@@ -409,30 +406,31 @@ html, body {
 
 
 .led-comma-svg {
-  width: 10px;
-  width: 1.1vw;
-  width: clamp(8px, 1.1vw, 15px);
+  width: 12px;
+  width: 1.2vw;
+  width: clamp(9px, 1.2vw, 16px);
   margin: 0 1px;
 }
 
 .led-digit-svg .seg-on {
+  fill: #ff1818;
   fill: var(--led-red-lit);
-  filter: drop-shadow(0 0 3px var(--led-red-glow)) drop-shadow(0 0 7px var(--led-red-glow));
+  filter: drop-shadow(0 0 2px #ff0000) drop-shadow(0 0 5px #ff0000);
   transition: fill 0.15s ease;
 }
 
 .clock-led-digit {
-  height: 2rem;
-  height: 3.2vh;
-  height: clamp(1.4rem, 3.2vh, 2.6rem);
+  height: 2.4rem;
+  height: 3.8vh;
+  height: clamp(1.6rem, 3.8vh, 2.9rem);
   width: auto;
 }
 
 .clock-colon {
   width: 10px;
-  height: 2rem;
-  height: 3.2vh;
-  height: clamp(1.4rem, 3.2vh, 2.6rem);
+  height: 2.4rem;
+  height: 3.8vh;
+  height: clamp(1.6rem, 3.8vh, 2.9rem);
   display: inline-flex;
   flex-direction: column;
   justify-content: center;
@@ -473,7 +471,9 @@ html, body {
 
 .footer-text {
   color: #fff4a3;
-  font-size: clamp(0.95rem, 1.7vw, 1.55rem);
+  font-size: 1.35rem;
+  font-size: 1.8vw;
+  font-size: clamp(1rem, 1.8vw, 1.6rem);
   font-weight: 900;
   letter-spacing: 2.5px;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.95);
@@ -501,18 +501,7 @@ html, body {
 }
 
 .tv-remote-hint {
-  position: absolute;
-  bottom: 8px;
-  right: 14px;
-  color: rgba(255, 255, 255, 0.45);
-  background: rgba(0, 0, 0, 0.6);
-  padding: 3px 9px;
-  border-radius: 4px;
-  font-size: 0.68rem;
-  font-weight: 600;
-  letter-spacing: 0.4px;
-  z-index: 10;
-  pointer-events: none;
+  display: none;
 }
 
 /* ===================================================================

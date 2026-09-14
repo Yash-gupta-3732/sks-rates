@@ -1,0 +1,17 @@
+{
+  "name": "ज्वेलर्स सूर्य कुमार एण्ड संस - Live Jewellery Rates",
+  "short_name": "SKS Rates",
+  "start_url": "./index.html",
+  "display": "fullscreen",
+  "orientation": "landscape-primary",
+  "background_color": "#112338",
+  "theme_color": "#112338",
+  "description": "32-inch Android TV Jewellery Rate Display Board",
+  "icons": [
+    {
+      "src": "assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}

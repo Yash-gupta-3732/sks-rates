@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>ज्वेलर्स सूर्य कुमार एण्ड संस - Live Jewellery Rates</title>
+  <meta name="theme-color" content="#112338">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="stylesheet" href="css/style.css?v=20260909_v9">
+  <link rel="manifest" href="manifest.json">
+  <script>
+    // Auto-clear any stale cache from earlier runs
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(regs => {
+        for (const r of regs) r.unregister();
+      });
+      if ('caches' in window) {
+        caches.keys().then(keys => keys.forEach(k => caches.delete(k)));
+      }
+    }
+  </script>
+</head>
+<body>
+
+  <!-- TV 16:9 Screen Boundary Wrapper -->
+  <div class="tv-screen-wrapper">
+    <div class="board-chassis">
+      
+      <!-- Four Corner Mounting Bolts (Hardware Realism) -->
+      <div class="screw screw-tl"></div>
+      <div class="screw screw-tr"></div>
+      <div class="screw screw-bl"></div>
+      <div class="screw screw-br"></div>
+
+      <!-- Main Acrylic Electronic Surface -->
+      <main class="board-surface">
+        <!-- Inner Double Gold Framing -->
+        <div class="double-gold-frame"></div>
+
+        <!-- ==========================================
+             TOP HEADER: SKS Logo | Shop Name | BIS Logo
+             ========================================== -->
+        <header class="board-header">
+          
+          <!-- Top Left: SKS Diamond Crest (Exact Replica) -->
+          <div class="sks-logo-container">
+            <img src="assets/sks_logo.png" alt="SKS Logo" class="sks-logo-img">
+          </div>
+
+          <!-- Top Center: 3D Hindi Shop Branding & Showroom Title -->
+          <div class="shop-branding">
+            <h1 class="shop-name-hindi">ज्वेलर्स सूर्य कुमार एण्ड संस</h1>
+            <div class="shop-sub-title">BIS Hallmark Jewellery Showroom</div>
+          </div>
+
+          <!-- Top Right: BIS Hallmark Certified Logo -->
+          <div class="bis-logo-container">
+            <svg class="bis-svg" viewBox="0 0 220 160" xmlns="http://www.w3.org/2000/svg">
+              <!-- Outer Blue Rounded Triangle -->
+              <path d="M 110,12 
+                       L 190,82 
+                       Q 202,93 195,108 
+                       L 190,118 
+                       Q 184,128 168,128 
+                       L 52,128 
+                       Q 36,128 30,118 
+                       L 25,108 
+                       Q 18,93 30,82 
+                       Z" 
+                    fill="#3b5998" stroke="#ffffff" stroke-width="3" />
+              
+              <!-- Inner White Triangle -->
+              <polygon points="110,36 172,96 48,96" fill="#ffffff" />
+              
+              <!-- Red Center Dot (The Bindi / Dot of Hallmark) -->
+              <circle cx="110" cy="74" r="10" fill="#dc2626" />
+              
+              <!-- Hindi Motto Inside Triangle Base -->
+              <text x="110" y="118" font-family="'Nirmala UI', sans-serif" font-size="11.5" font-weight="bold" fill="#ffffff" text-anchor="middle" letter-spacing="0.5">मानक: पथप्रदर्शक:</text>
+              
+              <!-- Certified Hallmark Jewellery From BIS Red Banner -->
+              <rect x="15" y="136" width="190" height="20" rx="3" fill="#dc2626" />
+              <text x="110" y="150" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#ffffff" text-anchor="middle">Certified Hallmark Jewellery From BIS</text>
+            </svg>
+          </div>
+
+        </header>
+
+        <!-- Gold Separator Bar -->
+        <div class="gold-divider"></div>
+
+        <!-- ==========================================
+             TIME & DATE ELECTRONIC LED BAR
+             ========================================== -->
+        <section class="time-date-bar">
+          <!-- TIME Display -->
+          <div class="clock-widget">
+            <span class="clock-label">TIME</span>
+            <div class="led-strip-bezel">
+              <div id="time_hr_led"></div>
+              <div class="clock-colon"></div>
+              <div id="time_min_led"></div>
+              <div class="clock-colon"></div>
+              <div id="time_sec_led"></div>
+            </div>
+          </div>
+
+          <!-- DATE Display -->
+          <div class="clock-widget">
+            <span class="clock-label">DATE</span>
+            <div class="led-strip-bezel">
+              <div id="date_day_led"></div>
+              <div id="date_month_led"></div>
+              <div id="date_year_led"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             RATE MATRIX: 5 Rows x (TYPE, SALE, PURCHASE)
+             ========================================== -->
+        <section class="rates-section">
+          <div class="rate-header-title">** RATE PER 10 GMS. **</div>
+          
+          <table class="rate-table">
+            <thead>
+              <tr>
+                <th class="col-type-header">TYPE</th>
+                <th class="col-digit-header">SALE</th>
+                <th class="col-digit-header">PURCHASE</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Row 1: 24K GOLD -->
+              <tr>
+                <td class="rate-col-type">24K GOLD</td>
+                <td class="rate-col-digit">
+                  <div class="rate-led-holder" id="gold24_sale_led"></div>
+                </td>
+                <td class="rate-col-digit">
+                  <div class="rate-led-holder" id="gold24_purchase_led"></div>
+                </td>
+              </tr>
+
+              <!-- Row 2: 22K GOLD -->
+              <tr>
+                <td class="rate-col-type">22K GOLD</td>
+                <td class="rate-col-digit">
+                  <div class="rate-led-holder" id="gold22_sale_led"></div>
+                </td>
+                <td class="rate-col-digit">
+                  <div class="rate-led-holder" id="gold22_purchase_led"></div>
+                </td>
+              </tr>
+
+              <!-- Row 3: 20K GOLD -->
+              <tr>
+                <td class="rate-col-type">20K GOLD</td>
+                <td class="rate-col-digit">
+                  <div class="rate-led-holder" id="gold20_sale_led"></div>
+                </td>
+                <td class="rate-col-digit">
+                  <div class="rate-led-holder" id="gold20_purchase_led"></div>
+                </td>
+              </tr>
+
+              <!-- Row 4: 18K GOLD -->
+              <tr>
+                <td class="rate-col-type">18K GOLD</td>
+                <td class="rate-col-digit">
+                  <div class="rate-led-holder" id="gold18_sale_led"></div>
+                </td>
+                <td class="rate-col-digit">
+                  <div class="rate-led-holder" id="gold18_purchase_led"></div>
+                </td>
+              </tr>
+
+              <!-- Row 5: SILVER -->
+              <tr>
+                <td class="rate-col-type">SILVER</td>
+                <td class="rate-col-digit">
+                  <div class="rate-led-holder" id="silver_sale_led"></div>
+                </td>
+                <td class="rate-col-digit">
+                  <div class="rate-led-holder" id="silver_purchase_led"></div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <!-- ==========================================
+             FOOTER: GST & MAKING CHARGE EXTRA
+             ========================================== -->
+        <footer class="board-footer">
+          <div class="footer-banner-box">
+            <div class="footer-text">* GST &amp; MAKING CHARGE EXTRA</div>
+          </div>
+        </footer>
+
+        <!-- Discreet Settings Gear Button (Click or TV Remote trigger) -->
+        <button id="openAdminBtn" class="admin-trigger-btn" title="Change Rates (Press Enter or Menu on Remote)">⚙️</button>
+        
+        <!-- Discreet Remote Hint -->
+        <div class="tv-remote-hint">Press [OK / Enter] on Remote to Update Rates</div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       TV REMOTE-FRIENDLY RATE SETTING MODAL
+       ========================================== -->
+  <div id="adminModal" class="modal-backdrop">
+    <div class="tv-admin-panel" role="dialog" aria-modal="true">
+      
+      <div class="modal-header">
+        <div class="modal-title">
+          <span>⚙️</span> Update Jewellery Rates (Per 10 Gms)
+        </div>
+        <button class="tv-btn tv-btn-cancel" onclick="closeModal()">✕ Close [Back]</button>
+      </div>
+
+      <div class="modal-grid">
+        <div class="modal-grid-header">JEWELLERY TYPE</div>
+        <div class="modal-grid-header" style="text-align: center;">SALE RATE (₹)</div>
+        <div class="modal-grid-header" style="text-align: center;">PURCHASE RATE (₹)</div>
+
+        <!-- 24K GOLD -->
+        <div class="rate-edit-row">
+          <div class="rate-name-label">24K GOLD</div>
+          <div><input type="number" id="input_gold24_sale" class="tv-input-box tv-focusable" placeholder="074500"></div>
+          <div><input type="number" id="input_gold24_purchase" class="tv-input-box tv-focusable" placeholder="072500"></div>
+        </div>
+
+        <!-- 22K GOLD -->
+        <div class="rate-edit-row">
+          <div class="rate-name-label">22K GOLD</div>
+          <div><input type="number" id="input_gold22_sale" class="tv-input-box tv-focusable" placeholder="068300"></div>
+          <div><input type="number" id="input_gold22_purchase" class="tv-input-box tv-focusable" placeholder="066300"></div>
+        </div>
+
+        <!-- 20K GOLD -->
+        <div class="rate-edit-row">
+          <div class="rate-name-label">20K GOLD</div>
+          <div><input type="number" id="input_gold20_sale" class="tv-input-box tv-focusable" placeholder="062100"></div>
+          <div><input type="number" id="input_gold20_purchase" class="tv-input-box tv-focusable" placeholder="060100"></div>
+        </div>
+
+        <!-- 18K GOLD -->
+        <div class="rate-edit-row">
+          <div class="rate-name-label">18K GOLD</div>
+          <div><input type="number" id="input_gold18_sale" class="tv-input-box tv-focusable" placeholder="055900"></div>
+          <div><input type="number" id="input_gold18_purchase" class="tv-input-box tv-focusable" placeholder="053900"></div>
+        </div>
+
+        <!-- SILVER -->
+        <div class="rate-edit-row">
+          <div class="rate-name-label">SILVER</div>
+          <div><input type="number" id="input_silver_sale" class="tv-input-box tv-focusable" placeholder="089500"></div>
+          <div><input type="number" id="input_silver_purchase" class="tv-input-box tv-focusable" placeholder="087500"></div>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button id="saveRatesBtn" class="tv-btn tv-btn-save tv-focusable">💾 SAVE &amp; APPLY [OK]</button>
+        <button id="cancelRatesBtn" class="tv-btn tv-btn-cancel tv-focusable">✕ CANCEL</button>
+      </div>
+
+      <div class="tv-nav-hint">
+        🎮 <strong>TV Remote Guide:</strong> Use <strong>Arrow Keys (▲ ▼ ◄ ►)</strong> to move between fields &bull; Press <strong>OK</strong> to edit/save &bull; Press <strong>Back / Esc</strong> to exit.
+      </div>
+    </div>
+  </div>
+
+  <script src="js/app.js?v=20260909_v9"></script>
+</body>
+</html>

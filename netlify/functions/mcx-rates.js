@@ -40,24 +40,27 @@ exports.handler = async function(event, context) {
     const silverUsd = silverData?.price || 63.5;
 
     // 1 Troy Ounce = 31.1034768 grams
-    // Gold per 10 grams in INR with ~6% Indian landed customs duty & cess
+    // Gold per 10 grams in INR with Indian MCX futures landed factor (~14.25%)
+    // Aligns international spot with Indian MCX 10g rate (~1,50,700)
     const rawGold10g = (goldUsd / 31.1034768) * 10 * usdinr;
-    const landedGold10g = rawGold10g * 1.06;
+    const landedGold10g = rawGold10g * 1.1425;
     const gold24 = Math.round(landedGold10g / 100) * 100;
 
-    // Silver per 1 kg in INR with ~6% Indian landed customs duty
-    const rawSilver1kg = (silverUsd / 31.1034768) * 1000 * usdinr;
-    const landedSilver1kg = rawSilver1kg * 1.06;
-    const silver = Math.round(landedSilver1kg / 100) * 100;
+    // Silver per 10 grams in INR with Indian MCX futures factor (~1.20)
+    const rawSilver10g = (silverUsd / 31.1034768) * 10 * usdinr;
+    const mcxSilver10g = Math.round(rawSilver10g * 1.20);
+    // Silver sale rate for 10g: MCX Silver (10g) - 250, rounded to nearest 100
+    const silverSale10g = Math.round((mcxSilver10g - 250) / 100) * 100;
 
     const payload = {
       success: true,
       gold24: gold24,
-      silver: silver,
+      silver10g: mcxSilver10g,
+      silver: mcxSilver10g * 100,
       gold22: Math.round((gold24 * 22 / 24) / 100) * 100,
       gold20: Math.round((gold24 * 20 / 24) / 100) * 100,
       gold18: Math.round((gold24 * 18 / 24) / 100) * 100,
-      silverSale: Math.round((silver - 250) / 100) * 100,
+      silverSale: silverSale10g,
       updatedAt: new Date().toISOString()
     };
 
@@ -73,12 +76,13 @@ exports.handler = async function(event, context) {
     console.error("MCX Function Error:", err);
     const fallback = cachedData || {
       success: true,
-      gold24: 140000,
-      silver: 206200,
-      gold22: 128300,
-      gold20: 116700,
-      gold18: 105000,
-      silverSale: 206000,
+      gold24: 150700,
+      silver10g: 2330,
+      silver: 233000,
+      gold22: 138100,
+      gold20: 125600,
+      gold18: 113000,
+      silverSale: 2100,
       fallback: true,
       updatedAt: new Date().toISOString()
     };

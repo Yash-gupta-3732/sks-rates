@@ -6,15 +6,15 @@
 
 // Default rates (6 digits format, e.g., 140000, 000000)
 const DEFAULT_RATES = {
-  gold24_sale: "140000",
+  gold24_sale: "150700",
   gold24_purchase: "000000",
-  gold22_sale: "128300",
+  gold22_sale: "138100",
   gold22_purchase: "000000",
-  gold20_sale: "116700",
+  gold20_sale: "125600",
   gold20_purchase: "000000",
-  gold18_sale: "105000",
+  gold18_sale: "113000",
   gold18_purchase: "000000",
-  silver_sale: "206000",
+  silver_sale: "002100",
   silver_purchase: "000000"
 };
 
@@ -145,11 +145,16 @@ function computeDerivedGoldFrom24K(gold24Price) {
   };
 }
 
-// Silver sale rate formula: MCX Silver - 250, rounded to nearest 100
+// Silver sale rate formula for 10 grams: (MCX Silver 10g - 250), rounded to nearest 100
 function computeSilverSaleRate(mcxSilver) {
-  const s = Number(mcxSilver);
-  if (!s || isNaN(s)) return "000000";
-  return String(roundTo100(s - 250)).padStart(6, '0');
+  let s = Number(mcxSilver);
+  if (!s || isNaN(s)) return "002100";
+  // If a 1kg price (> 10000) was passed, normalize to 10g
+  if (s > 10000) {
+    s = s / 100;
+  }
+  const rate10g = Math.round((s - 250) / 100) * 100;
+  return String(Math.max(0, rate10g)).padStart(6, '0');
 }
 
 function loadRates() {
@@ -165,6 +170,18 @@ function loadRates() {
         currentRates[pKey] = "000000";
       }
     });
+    // If silver_sale is an old 1kg rate (> 10000), update it to 10g rate
+    if (Number(currentRates.silver_sale) > 10000) {
+      currentRates.silver_sale = "002100";
+    }
+    // If gold24_sale is still the old 140000, update to 150700
+    if (currentRates.gold24_sale === "140000" || currentRates.gold24_sale === "074500") {
+      currentRates.gold24_sale = "150700";
+      const derived = computeDerivedGoldFrom24K("150700");
+      currentRates.gold22_sale = derived.gold22_sale;
+      currentRates.gold20_sale = derived.gold20_sale;
+      currentRates.gold18_sale = derived.gold18_sale;
+    }
   } catch (e) {
     console.warn("Could not load from localStorage, using defaults", e);
   }
@@ -231,17 +248,19 @@ async function fetchLiveMCXRates(showToast = false) {
       const inrData = await inrRes.json();
       const silverData = await silverRes.json();
       const usdinr = inrData?.rates?.INR || 95.91;
-      const goldUsd = goldData?.price || 4330;
+      const goldUsd = goldData?.price || 4288;
       const silverUsd = silverData?.price || 63.5;
-      const gold24 = roundTo100((goldUsd / 31.1034768) * 10 * usdinr * 1.06);
-      const silver = roundTo100((silverUsd / 31.1034768) * 1000 * usdinr * 1.06);
-      data = { gold24, silver };
+      const gold24 = roundTo100((goldUsd / 31.1034768) * 10 * usdinr * 1.1425);
+      const rawSilver10g = (silverUsd / 31.1034768) * 10 * usdinr;
+      const silver10g = Math.round(rawSilver10g * 1.20);
+      const silverSale = Math.round((silver10g - 250) / 100) * 100;
+      data = { gold24, silver10g, silver: silver10g * 100, silverSale };
     }
 
     if (data && data.gold24) {
       const gold24Str = String(roundTo100(data.gold24)).padStart(6, '0');
       const derived = computeDerivedGoldFrom24K(gold24Str);
-      const silverSaleStr = computeSilverSaleRate(data.silver || 206200);
+      const silverSaleStr = data.silverSale ? String(data.silverSale).padStart(6, '0') : computeSilverSaleRate(data.silver10g || data.silver || 2320);
 
       currentRates.gold24_sale = gold24Str;
       currentRates.gold22_sale = derived.gold22_sale;

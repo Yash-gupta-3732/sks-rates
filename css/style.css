@@ -359,18 +359,19 @@ div[class*="Netlify"] {
 }
 
 .col-type-header,
+.col-digit-header,
 .rate-table th {
   border: 1.5px solid var(--gold-border);
-  padding: 0.6vh 0.8vw;
+  padding: 0.8vh 0.8vw;
   color: #ffffff;
-  font-size: 1.25rem;
-  font-size: 1.8vw;
-  font-size: clamp(1rem, 1.8vw, 1.6rem);
+  font-size: 1.85rem;
+  font-size: 2.5vw;
+  font-size: clamp(1.4rem, 2.5vw, 2.2rem);
   font-weight: 900;
-  letter-spacing: 2px;
+  letter-spacing: 2.5px;
   text-align: center;
   background: rgba(16, 36, 60, 0.95);
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.9);
 }
 
 .rate-table td {
@@ -379,7 +380,11 @@ div[class*="Netlify"] {
   vertical-align: middle;
 }
 
-.col-type-header,
+.col-type-header {
+  width: 28%;
+  text-align: center !important;
+}
+
 .rate-col-type {
   width: 28%;
   color: #ffffff;
@@ -601,10 +606,11 @@ div[class*="Netlify"] {
 }
 
 .modal-grid-header {
-  font-weight: 800;
-  font-size: 1rem;
-  color: #94a3b8;
-  padding-bottom: 2px;
+  font-weight: 900;
+  font-size: 1.15rem;
+  color: #cbd5e1;
+  letter-spacing: 0.8px;
+  padding-bottom: 4px;
 }
 
 .rate-edit-row {
@@ -884,17 +890,19 @@ div[class*="Netlify"] {
   .col-type-header,
   .rate-table th.col-type-header {
     width: 30% !important;
-    padding: 5px 2px !important;
-    font-size: 0.78rem !important;
-    letter-spacing: 0.6px !important;
+    padding: 6px 3px !important;
+    font-size: 1.05rem !important;
+    font-weight: 900 !important;
+    letter-spacing: 1px !important;
   }
 
   .col-digit-header,
   .rate-table th.col-digit-header {
     width: 35% !important;
-    padding: 5px 2px !important;
-    font-size: 0.78rem !important;
-    letter-spacing: 0.6px !important;
+    padding: 6px 3px !important;
+    font-size: 1.05rem !important;
+    font-weight: 900 !important;
+    letter-spacing: 1px !important;
   }
 
   .rate-table td {

@@ -44,22 +44,22 @@ exports.handler = async function(event, context) {
     // Aligns international spot with Indian MCX 10g rate (~1,50,700)
     const rawGold10g = (goldUsd / 31.1034768) * 10 * usdinr;
     const landedGold10g = rawGold10g * 1.1425;
-    const gold24 = Math.round(landedGold10g / 100) * 100;
+    const gold24 = Math.round(landedGold10g);
 
     // Silver per 10 grams in INR with Indian MCX futures factor (~1.20)
     const rawSilver10g = (silverUsd / 31.1034768) * 10 * usdinr;
     const mcxSilver10g = Math.round(rawSilver10g * 1.20);
-    // Silver sale rate for 10g: MCX Silver (10g) - 250, rounded to nearest 100
-    const silverSale10g = Math.round((mcxSilver10g - 250) / 100) * 100;
+    // Silver sale rate for 10g: MCX Silver (10g) - 250 (exact integer)
+    const silverSale10g = Math.round(mcxSilver10g - 250);
 
     const payload = {
       success: true,
       gold24: gold24,
       silver10g: mcxSilver10g,
       silver: mcxSilver10g * 100,
-      gold22: Math.round((gold24 * 22 / 24) / 100) * 100,
-      gold20: Math.round((gold24 * 20 / 24) / 100) * 100,
-      gold18: Math.round((gold24 * 18 / 24) / 100) * 100,
+      gold22: Math.round(gold24 * 22 / 24),
+      gold20: Math.round(gold24 * 20 / 24),
+      gold18: Math.round(gold24 * 18 / 24),
       silverSale: silverSale10g,
       updatedAt: new Date().toISOString()
     };
@@ -77,12 +77,12 @@ exports.handler = async function(event, context) {
     const fallback = cachedData || {
       success: true,
       gold24: 150700,
-      silver10g: 2330,
-      silver: 233000,
-      gold22: 138100,
-      gold20: 125600,
-      gold18: 113000,
-      silverSale: 2100,
+      silver10g: 2326,
+      silver: 232600,
+      gold22: 138142,
+      gold20: 125583,
+      gold18: 113025,
+      silverSale: 2076,
       fallback: true,
       updatedAt: new Date().toISOString()
     };

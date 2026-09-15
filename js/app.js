@@ -8,13 +8,13 @@
 const DEFAULT_RATES = {
   gold24_sale: "150700",
   gold24_purchase: "000000",
-  gold22_sale: "138100",
+  gold22_sale: "138142",
   gold22_purchase: "000000",
-  gold20_sale: "125600",
+  gold20_sale: "125583",
   gold20_purchase: "000000",
-  gold18_sale: "113000",
+  gold18_sale: "113025",
   gold18_purchase: "000000",
-  silver_sale: "002100",
+  silver_sale: "002076",
   silver_purchase: "000000"
 };
 
@@ -134,26 +134,26 @@ function roundTo100(val) {
   return Math.round(Number(val) / 100) * 100;
 }
 
-// Auto-calculate 22K, 20K, 18K from 24K using exact mathematical purity ratio
+// Auto-calculate 22K, 20K, 18K from 24K using exact mathematical purity ratio (no roundoff)
 function computeDerivedGoldFrom24K(gold24Price) {
   const p = Number(gold24Price);
   if (!p || isNaN(p)) return {};
   return {
-    gold22_sale: String(roundTo100(p * 22 / 24)).padStart(6, '0'),
-    gold20_sale: String(roundTo100(p * 20 / 24)).padStart(6, '0'),
-    gold18_sale: String(roundTo100(p * 18 / 24)).padStart(6, '0')
+    gold22_sale: String(Math.round(p * 22 / 24)).padStart(6, '0'),
+    gold20_sale: String(Math.round(p * 20 / 24)).padStart(6, '0'),
+    gold18_sale: String(Math.round(p * 18 / 24)).padStart(6, '0')
   };
 }
 
-// Silver sale rate formula for 10 grams: (MCX Silver 10g - 250), rounded to nearest 100
+// Silver sale rate formula for 10 grams: (MCX Silver 10g - 250) (no roundoff)
 function computeSilverSaleRate(mcxSilver) {
   let s = Number(mcxSilver);
-  if (!s || isNaN(s)) return "002100";
+  if (!s || isNaN(s)) return "002076";
   // If a 1kg price (> 10000) was passed, normalize to 10g
   if (s > 10000) {
     s = s / 100;
   }
-  const rate10g = Math.round((s - 250) / 100) * 100;
+  const rate10g = Math.round(s - 250);
   return String(Math.max(0, rate10g)).padStart(6, '0');
 }
 
@@ -250,17 +250,17 @@ async function fetchLiveMCXRates(showToast = false) {
       const usdinr = (inrData && inrData.rates && inrData.rates.INR) ? inrData.rates.INR : 95.91;
       const goldUsd = (goldData && goldData.price) ? goldData.price : 4288;
       const silverUsd = (silverData && silverData.price) ? silverData.price : 63.5;
-      const gold24 = roundTo100((goldUsd / 31.1034768) * 10 * usdinr * 1.1425);
+      const gold24 = Math.round((goldUsd / 31.1034768) * 10 * usdinr * 1.1425);
       const rawSilver10g = (silverUsd / 31.1034768) * 10 * usdinr;
       const silver10g = Math.round(rawSilver10g * 1.20);
-      const silverSale = Math.round((silver10g - 250) / 100) * 100;
+      const silverSale = Math.round(silver10g - 250);
       data = { gold24, silver10g, silver: silver10g * 100, silverSale };
     }
 
     if (data && data.gold24) {
-      const gold24Str = String(roundTo100(data.gold24)).padStart(6, '0');
+      const gold24Str = String(Math.round(data.gold24)).padStart(6, '0');
       const derived = computeDerivedGoldFrom24K(gold24Str);
-      const silverSaleStr = data.silverSale ? String(data.silverSale).padStart(6, '0') : computeSilverSaleRate(data.silver10g || data.silver || 2320);
+      const silverSaleStr = data.silverSale ? String(Math.round(data.silverSale)).padStart(6, '0') : computeSilverSaleRate(data.silver10g || data.silver || 2320);
 
       currentRates.gold24_sale = gold24Str;
       currentRates.gold22_sale = derived.gold22_sale;

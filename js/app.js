@@ -127,7 +127,7 @@ function renderClockGroup(containerId, strPair, hasDot = true) {
 }
 
 // State management
-let currentRates = { ...DEFAULT_RATES };
+let currentRates = Object.assign({}, DEFAULT_RATES);
 
 // Round to nearest 100
 function roundTo100(val) {
@@ -161,7 +161,7 @@ function loadRates() {
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
-      currentRates = { ...DEFAULT_RATES, ...JSON.parse(saved) };
+      currentRates = Object.assign({}, DEFAULT_RATES, JSON.parse(saved));
     }
     // Clean old dummy purchase rates so they default to 000000
     ['gold24', 'gold22', 'gold20', 'gold18', 'silver'].forEach(k => {
@@ -189,7 +189,7 @@ function loadRates() {
 
 function saveRates(newRates) {
   try {
-    currentRates = { ...currentRates, ...newRates };
+    currentRates = Object.assign({}, currentRates, newRates);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(currentRates));
     renderAllRates();
     showToastNotification("Rates Updated Successfully!");
@@ -247,9 +247,9 @@ async function fetchLiveMCXRates(showToast = false) {
       const goldData = await goldRes.json();
       const inrData = await inrRes.json();
       const silverData = await silverRes.json();
-      const usdinr = inrData?.rates?.INR || 95.91;
-      const goldUsd = goldData?.price || 4288;
-      const silverUsd = silverData?.price || 63.5;
+      const usdinr = (inrData && inrData.rates && inrData.rates.INR) ? inrData.rates.INR : 95.91;
+      const goldUsd = (goldData && goldData.price) ? goldData.price : 4288;
+      const silverUsd = (silverData && silverData.price) ? silverData.price : 63.5;
       const gold24 = roundTo100((goldUsd / 31.1034768) * 10 * usdinr * 1.1425);
       const rawSilver10g = (silverUsd / 31.1034768) * 10 * usdinr;
       const silver10g = Math.round(rawSilver10g * 1.20);

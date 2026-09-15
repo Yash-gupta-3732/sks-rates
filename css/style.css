@@ -12,9 +12,12 @@
   --gold-dark: #b8860b;
   --gold-border: #f1c40f;
   --gold-frame: #d4af37;
-  --led-red-lit: #ff1f1f;
-  --led-red-glow: #ff0000;
-  --led-red-unlit: rgba(255, 30, 30, 0.08);
+  --led-gold-lit: #ffc700;
+  --led-gold-glow: #ffa500;
+  --led-gold-unlit: rgba(255, 199, 0, 0.05);
+  --led-red-lit: #ffc700;
+  --led-red-glow: #ffa500;
+  --led-red-unlit: rgba(255, 199, 0, 0.05);
   --tv-focus-glow: #00e5ff;
 }
 
@@ -425,7 +428,8 @@ div[class*="Netlify"] {
 }
 
 .led-digit-svg .seg-off {
-  fill: var(--led-red-unlit);
+  fill: rgba(255, 199, 0, 0.05);
+  fill: var(--led-gold-unlit);
   transition: fill 0.15s ease;
 }
 
@@ -438,9 +442,9 @@ div[class*="Netlify"] {
 }
 
 .led-digit-svg .seg-on {
-  fill: #ff1818;
-  fill: var(--led-red-lit);
-  filter: drop-shadow(0 0 2px #ff0000) drop-shadow(0 0 5px #ff0000);
+  fill: #ffc700;
+  fill: var(--led-gold-lit);
+  filter: drop-shadow(0 0 2px #ffa500) drop-shadow(0 0 6px #ff8c00);
   transition: fill 0.15s ease;
 }
 
@@ -467,9 +471,10 @@ div[class*="Netlify"] {
   content: '';
   width: 4px;
   height: 4px;
-  background: var(--led-red-lit);
+  background: #ffc700;
+  background: var(--led-gold-lit);
   border-radius: 50%;
-  box-shadow: 0 0 5px var(--led-red-glow);
+  box-shadow: 0 0 5px #ffa500;
 }
 
 /* ===================================================================

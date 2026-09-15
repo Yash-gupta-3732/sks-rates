@@ -4,18 +4,18 @@
  * 100% Offline | Persistent LocalStorage | TV Remote D-Pad Navigation
  */
 
-// Default rates (6 digits format, e.g., 074500)
+// Default rates (6 digits format, e.g., 140000, 000000)
 const DEFAULT_RATES = {
-  gold24_sale: "074500",
-  gold24_purchase: "072500",
-  gold22_sale: "068300",
-  gold22_purchase: "066300",
-  gold20_sale: "062100",
-  gold20_purchase: "060100",
-  gold18_sale: "055900",
-  gold18_purchase: "053900",
-  silver_sale: "089500",
-  silver_purchase: "087500"
+  gold24_sale: "140000",
+  gold24_purchase: "000000",
+  gold22_sale: "128300",
+  gold22_purchase: "000000",
+  gold20_sale: "116700",
+  gold20_purchase: "000000",
+  gold18_sale: "105000",
+  gold18_purchase: "000000",
+  silver_sale: "206000",
+  silver_purchase: "000000"
 };
 
 const STORAGE_KEY = "sks_jewellery_board_rates_v1";
@@ -129,12 +129,42 @@ function renderClockGroup(containerId, strPair, hasDot = true) {
 // State management
 let currentRates = { ...DEFAULT_RATES };
 
+// Round to nearest 100
+function roundTo100(val) {
+  return Math.round(Number(val) / 100) * 100;
+}
+
+// Auto-calculate 22K, 20K, 18K from 24K using exact mathematical purity ratio
+function computeDerivedGoldFrom24K(gold24Price) {
+  const p = Number(gold24Price);
+  if (!p || isNaN(p)) return {};
+  return {
+    gold22_sale: String(roundTo100(p * 22 / 24)).padStart(6, '0'),
+    gold20_sale: String(roundTo100(p * 20 / 24)).padStart(6, '0'),
+    gold18_sale: String(roundTo100(p * 18 / 24)).padStart(6, '0')
+  };
+}
+
+// Silver sale rate formula: MCX Silver - 250, rounded to nearest 100
+function computeSilverSaleRate(mcxSilver) {
+  const s = Number(mcxSilver);
+  if (!s || isNaN(s)) return "000000";
+  return String(roundTo100(s - 250)).padStart(6, '0');
+}
+
 function loadRates() {
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
       currentRates = { ...DEFAULT_RATES, ...JSON.parse(saved) };
     }
+    // Clean old dummy purchase rates so they default to 000000
+    ['gold24', 'gold22', 'gold20', 'gold18', 'silver'].forEach(k => {
+      const pKey = `${k}_purchase`;
+      if (!currentRates[pKey] || ['072500', '066300', '060100', '053900', '087500'].includes(currentRates[pKey])) {
+        currentRates[pKey] = "000000";
+      }
+    });
   } catch (e) {
     console.warn("Could not load from localStorage, using defaults", e);
   }
@@ -168,6 +198,84 @@ function renderAllRates() {
   renderLEDString("silver_purchase_led", currentRates.silver_purchase, true);
 }
 
+// Live MCX Fetcher with dual-strategy (Netlify Function + Direct Fallback)
+async function fetchLiveMCXRates(showToast = false) {
+  const syncBtn = document.getElementById("syncMcxBtn");
+  if (syncBtn) {
+    syncBtn.disabled = true;
+    syncBtn.textContent = "⏳ SYNCING...";
+  }
+
+  try {
+    let data = null;
+    try {
+      const res = await fetch('/api/mcx-rates');
+      if (res.ok) data = await res.json();
+    } catch (e) {}
+
+    if (!data || !data.gold24) {
+      try {
+        const res2 = await fetch('/.netlify/functions/mcx-rates');
+        if (res2.ok) data = await res2.json();
+      } catch (e) {}
+    }
+
+    // Direct client fallback if running offline or standalone
+    if (!data || !data.gold24) {
+      const [goldRes, inrRes, silverRes] = await Promise.all([
+        fetch('https://api.gold-api.com/price/XAU'),
+        fetch('https://open.er-api.com/v6/latest/USD'),
+        fetch('https://api.gold-api.com/price/XAG')
+      ]);
+      const goldData = await goldRes.json();
+      const inrData = await inrRes.json();
+      const silverData = await silverRes.json();
+      const usdinr = inrData?.rates?.INR || 95.91;
+      const goldUsd = goldData?.price || 4330;
+      const silverUsd = silverData?.price || 63.5;
+      const gold24 = roundTo100((goldUsd / 31.1034768) * 10 * usdinr * 1.06);
+      const silver = roundTo100((silverUsd / 31.1034768) * 1000 * usdinr * 1.06);
+      data = { gold24, silver };
+    }
+
+    if (data && data.gold24) {
+      const gold24Str = String(roundTo100(data.gold24)).padStart(6, '0');
+      const derived = computeDerivedGoldFrom24K(gold24Str);
+      const silverSaleStr = computeSilverSaleRate(data.silver || 206200);
+
+      currentRates.gold24_sale = gold24Str;
+      currentRates.gold22_sale = derived.gold22_sale;
+      currentRates.gold20_sale = derived.gold20_sale;
+      currentRates.gold18_sale = derived.gold18_sale;
+      currentRates.silver_sale = silverSaleStr;
+
+      // Purchase rates remain manual / default to 000000
+      ['gold24', 'gold22', 'gold20', 'gold18', 'silver'].forEach(k => {
+        if (!currentRates[`${k}_purchase`]) currentRates[`${k}_purchase`] = "000000";
+      });
+
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(currentRates));
+      renderAllRates();
+      updateModalInputs();
+
+      if (showToast) {
+        showToastNotification("Live MCX Rates Applied!");
+      }
+      console.log("[MCX API] Live rates applied:", currentRates);
+    }
+  } catch (err) {
+    console.warn("[MCX API] Could not fetch live rates:", err);
+    if (showToast) {
+      showToastNotification("Offline: Using Stored Rates");
+    }
+  } finally {
+    if (syncBtn) {
+      syncBtn.disabled = false;
+      syncBtn.textContent = "🔄 SYNC LIVE MCX";
+    }
+  }
+}
+
 // Live Clock & Calendar Ticker
 function updateClockAndDate() {
   const now = new Date();
@@ -197,15 +305,17 @@ const openAdminBtn = document.getElementById("openAdminBtn");
 const saveRatesBtn = document.getElementById("saveRatesBtn");
 const cancelRatesBtn = document.getElementById("cancelRatesBtn");
 
-function openModal() {
-  // Populate form with current values
+function updateModalInputs() {
   for (const [key, val] of Object.entries(currentRates)) {
     const input = document.getElementById(`input_${key}`);
     if (input) {
       input.value = val;
     }
   }
-  
+}
+
+function openModal() {
+  updateModalInputs();
   modalBackdrop.classList.add("active");
   // Focus on first input for remote control
   const firstInput = document.getElementById("input_gold24_sale");
@@ -409,11 +519,38 @@ document.addEventListener("DOMContentLoaded", () => {
   if (saveRatesBtn) saveRatesBtn.addEventListener("click", handleSaveForm);
   if (cancelRatesBtn) cancelRatesBtn.addEventListener("click", closeModal);
   
+  // Hook up live MCX Sync button
+  const syncBtn = document.getElementById("syncMcxBtn");
+  if (syncBtn) {
+    syncBtn.addEventListener("click", () => fetchLiveMCXRates(true));
+  }
+
+  // Auto-calculate 22K, 20K, 18K live when typing 24K in modal
+  const input24 = document.getElementById("input_gold24_sale");
+  if (input24) {
+    input24.addEventListener("input", (e) => {
+      const val = e.target.value;
+      if (val && val.length >= 5) {
+        const derived = computeDerivedGoldFrom24K(val);
+        const in22 = document.getElementById("input_gold22_sale");
+        const in20 = document.getElementById("input_gold20_sale");
+        const in18 = document.getElementById("input_gold18_sale");
+        if (in22 && derived.gold22_sale) in22.value = derived.gold22_sale;
+        if (in20 && derived.gold20_sale) in20.value = derived.gold20_sale;
+        if (in18 && derived.gold18_sale) in18.value = derived.gold18_sale;
+      }
+    });
+  }
+
   // Double-click anywhere on the board also opens the rate updater
   document.querySelector(".board-surface").addEventListener("dblclick", openModal);
   
   requestScreenWakeLock();
   initBurnInProtection();
+
+  // Fetch live MCX rates on startup & auto-refresh every 10 minutes
+  fetchLiveMCXRates(false);
+  setInterval(() => fetchLiveMCXRates(false), 10 * 60 * 1000);
   
   if (window.location.hash === '#admin') {
     setTimeout(openModal, 150);

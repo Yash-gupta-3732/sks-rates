@@ -219,7 +219,14 @@
         <div class="modal-title">
           <span>⚙️</span> Update Jewellery Rates (Per 10 Gms)
         </div>
-        <button class="tv-btn tv-btn-cancel" onclick="closeModal()">✕ Close [Back]</button>
+        <div style="display: flex; gap: 8px;">
+          <button id="syncMcxBtn" type="button" class="tv-btn tv-focusable" style="background: #eab308; color: #0f172a; font-weight: 900;">🔄 SYNC LIVE MCX</button>
+          <button class="tv-btn tv-btn-cancel tv-focusable" onclick="closeModal()">✕ Close [Back]</button>
+        </div>
+      </div>
+
+      <div style="color: #ffd700; font-size: 0.85rem; margin-bottom: 12px; text-align: center; background: rgba(234, 179, 8, 0.12); padding: 6px 12px; border-radius: 6px; border: 1px solid rgba(234, 179, 8, 0.3);">
+        ⚡ <strong>Auto-Purity Calculation:</strong> Changing 24K auto-calculates 22K, 20K, &amp; 18K &bull; Silver is MCX &minus; ₹250 &bull; Purchase is manual (Default 000000).
       </div>
 
       <div class="modal-grid">
@@ -229,37 +236,37 @@
 
         <!-- 24K GOLD -->
         <div class="rate-edit-row">
-          <div class="rate-name-label">24K GOLD</div>
-          <div><input type="number" id="input_gold24_sale" class="tv-input-box tv-focusable" placeholder="074500"></div>
-          <div><input type="number" id="input_gold24_purchase" class="tv-input-box tv-focusable" placeholder="072500"></div>
+          <div class="rate-name-label">24K GOLD (Base)</div>
+          <div><input type="number" id="input_gold24_sale" class="tv-input-box tv-focusable" placeholder="140000"></div>
+          <div><input type="number" id="input_gold24_purchase" class="tv-input-box tv-focusable" placeholder="000000"></div>
         </div>
 
         <!-- 22K GOLD -->
         <div class="rate-edit-row">
-          <div class="rate-name-label">22K GOLD</div>
-          <div><input type="number" id="input_gold22_sale" class="tv-input-box tv-focusable" placeholder="068300"></div>
-          <div><input type="number" id="input_gold22_purchase" class="tv-input-box tv-focusable" placeholder="066300"></div>
+          <div class="rate-name-label">22K GOLD (91.6%)</div>
+          <div><input type="number" id="input_gold22_sale" class="tv-input-box tv-focusable" placeholder="128300"></div>
+          <div><input type="number" id="input_gold22_purchase" class="tv-input-box tv-focusable" placeholder="000000"></div>
         </div>
 
         <!-- 20K GOLD -->
         <div class="rate-edit-row">
-          <div class="rate-name-label">20K GOLD</div>
-          <div><input type="number" id="input_gold20_sale" class="tv-input-box tv-focusable" placeholder="062100"></div>
-          <div><input type="number" id="input_gold20_purchase" class="tv-input-box tv-focusable" placeholder="060100"></div>
+          <div class="rate-name-label">20K GOLD (83.3%)</div>
+          <div><input type="number" id="input_gold20_sale" class="tv-input-box tv-focusable" placeholder="116700"></div>
+          <div><input type="number" id="input_gold20_purchase" class="tv-input-box tv-focusable" placeholder="000000"></div>
         </div>
 
         <!-- 18K GOLD -->
         <div class="rate-edit-row">
-          <div class="rate-name-label">18K GOLD</div>
-          <div><input type="number" id="input_gold18_sale" class="tv-input-box tv-focusable" placeholder="055900"></div>
-          <div><input type="number" id="input_gold18_purchase" class="tv-input-box tv-focusable" placeholder="053900"></div>
+          <div class="rate-name-label">18K GOLD (75.0%)</div>
+          <div><input type="number" id="input_gold18_sale" class="tv-input-box tv-focusable" placeholder="105000"></div>
+          <div><input type="number" id="input_gold18_purchase" class="tv-input-box tv-focusable" placeholder="000000"></div>
         </div>
 
         <!-- SILVER -->
         <div class="rate-edit-row">
-          <div class="rate-name-label">SILVER</div>
-          <div><input type="number" id="input_silver_sale" class="tv-input-box tv-focusable" placeholder="089500"></div>
-          <div><input type="number" id="input_silver_purchase" class="tv-input-box tv-focusable" placeholder="087500"></div>
+          <div class="rate-name-label">SILVER (MCX - 250)</div>
+          <div><input type="number" id="input_silver_sale" class="tv-input-box tv-focusable" placeholder="206000"></div>
+          <div><input type="number" id="input_silver_purchase" class="tv-input-box tv-focusable" placeholder="000000"></div>
         </div>
       </div>
 

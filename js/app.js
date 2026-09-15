@@ -527,8 +527,8 @@ window.triggerBurnInShiftTest = function() {
   return `Current offset: ${JSON.stringify(BURN_IN_ORBIT[burnInCycleIndex])}`;
 };
 
-// Initialize everything on DOM ready
-document.addEventListener("DOMContentLoaded", () => {
+// Initialize everything on DOM ready or immediately if already loaded
+function initApp() {
   loadRates();
   renderAllRates();
   updateClockAndDate();
@@ -562,7 +562,10 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Double-click anywhere on the board also opens the rate updater
-  document.querySelector(".board-surface").addEventListener("dblclick", openModal);
+  const boardSurface = document.querySelector(".board-surface");
+  if (boardSurface) {
+    boardSurface.addEventListener("dblclick", openModal);
+  }
   
   requestScreenWakeLock();
   initBurnInProtection();
@@ -578,7 +581,13 @@ document.addEventListener("DOMContentLoaded", () => {
     if (window.location.hash === '#admin') openModal();
     else closeModal();
   });
-});
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initApp);
+} else {
+  initApp();
+}
 
 // Continuously eradicate Netlify Drawer / Feedback Widget
 function purgeNetlifyToolbar() {

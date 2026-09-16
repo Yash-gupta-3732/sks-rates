@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#112338">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <link rel="stylesheet" href="css/style.css?v=20260915_v14">
+  <link rel="stylesheet" href="css/style.css?v=20260916_v16">
   <link rel="manifest" href="manifest.json">
   <script>
     // Auto-clear any stale cache from earlier runs
@@ -199,6 +199,12 @@
           </div>
         </footer>
 
+        <!-- Official MCX Status Badge -->
+        <div id="mcxStatusBadge" class="mcx-live-badge status-live" title="Official Indian MCX Commodity Feed Status" onclick="openModal()">
+          <span class="pulse-dot"></span>
+          <span id="mcxBadgeText">MCX LIVE</span>
+        </div>
+
         <!-- Discreet Settings Gear Button (Click or TV Remote trigger) -->
         <button id="openAdminBtn" class="admin-trigger-btn" title="Change Rates (Press Enter or Menu on Remote)">⚙️</button>
         
@@ -207,6 +213,16 @@
 
       </main>
     </div>
+  </div>
+
+  <!-- High-Visibility Alert Popup for MCX API Failure -->
+  <div id="mcxErrorPopup" class="mcx-error-popup">
+    <div class="error-badge-icon">⚠️</div>
+    <div class="error-details">
+      <div class="error-title">OFFICIAL MCX API FAILED</div>
+      <div class="error-desc" id="mcxErrorPopupDesc">Official Indian MCX Commodity API failed to fetch data. Using backup rates.</div>
+    </div>
+    <button class="error-close-btn tv-focusable" onclick="dismissMcxErrorPopup()">✕ DISMISS</button>
   </div>
 
   <!-- ==========================================
@@ -223,6 +239,12 @@
           <button id="syncMcxBtn" type="button" class="tv-btn tv-focusable" style="background: #eab308; color: #0f172a; font-weight: 900;">🔄 SYNC LIVE MCX</button>
           <button class="tv-btn tv-btn-cancel tv-focusable" onclick="closeModal()">✕ Close [Back]</button>
         </div>
+      </div>
+
+      <!-- Official MCX Live Status Bar in Modal -->
+      <div id="modalMcxStatusBar" class="modal-mcx-status-bar status-live">
+        <span id="modalMcxStatusText">🟢 Official Indian MCX Commodity API: Connected &amp; Live</span>
+        <span id="modalMcxStatusTime" style="margin-left: auto; opacity: 0.85; font-size: 0.8rem;"></span>
       </div>
 
       <div class="modal-grid">
@@ -277,6 +299,6 @@
     </div>
   </div>
 
-  <script src="js/app.js?v=20260916_v15"></script>
+  <script src="js/app.js?v=20260916_v16"></script>
 </body>
 </html>

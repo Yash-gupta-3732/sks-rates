@@ -1,8 +1,14 @@
 import base64
 import os
+import re
 
-base_dir = r"C:\Users\gupta\.gemini\antigravity\scratch\jewellery-rate-display"
+base_dir = os.path.dirname(os.path.abspath(__file__))
+scratch_dir = r"C:\Users\gupta\.gemini\antigravity\scratch\jewellery-rate-display"
+
 logo_path = os.path.join(base_dir, "assets", "sks_logo.png")
+if not os.path.exists(logo_path):
+    logo_path = os.path.join(scratch_dir, "assets", "sks_logo.png")
+
 css_path = os.path.join(base_dir, "css", "style.css")
 js_path = os.path.join(base_dir, "js", "app.js")
 html_path = os.path.join(base_dir, "index.html")
@@ -20,9 +26,10 @@ with open(html_path, "r", encoding="utf-8") as f:
     html_content = f.read()
 
 # Replace css link with inline style
-html_content = html_content.replace(
-    '<link rel="stylesheet" href="css/style.css?v=20260909_v9">',
-    "<style>\n" + css_content + "\n</style>"
+html_content = re.sub(
+    r'<link rel="stylesheet" href="css/style\.css[^"]*">',
+    "<style>\n" + css_content.replace("\\", "\\\\") + "\n</style>",
+    html_content
 )
 
 # Remove manifest link
@@ -38,9 +45,10 @@ html_content = html_content.replace(
 )
 
 # Replace app.js script tag with inline script
-html_content = html_content.replace(
-    '<script src="js/app.js?v=20260909_v9"></script>',
-    "<script>\n" + js_content + "\n</script>"
+html_content = re.sub(
+    r'<script src="js/app\.js[^"]*"></script>',
+    "<script>\n" + js_content.replace("\\", "\\\\") + "\n</script>",
+    html_content
 )
 
 # Add inputmode="numeric" for mobile keypad

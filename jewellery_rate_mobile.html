@@ -369,18 +369,19 @@ div[class*="Netlify"] {
 }
 
 .col-type-header,
+.col-digit-header,
 .rate-table th {
   border: 1.5px solid var(--gold-border);
-  padding: 0.6vh 0.8vw;
+  padding: 0.8vh 0.8vw;
   color: #ffffff;
-  font-size: 1.25rem;
-  font-size: 1.8vw;
-  font-size: clamp(1rem, 1.8vw, 1.6rem);
+  font-size: 1.85rem;
+  font-size: 2.5vw;
+  font-size: clamp(1.4rem, 2.5vw, 2.2rem);
   font-weight: 900;
-  letter-spacing: 2px;
+  letter-spacing: 2.5px;
   text-align: center;
   background: rgba(16, 36, 60, 0.95);
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.9);
 }
 
 .rate-table td {
@@ -389,7 +390,11 @@ div[class*="Netlify"] {
   vertical-align: middle;
 }
 
-.col-type-header,
+.col-type-header {
+  width: 28%;
+  text-align: center !important;
+}
+
 .rate-col-type {
   width: 28%;
   color: #ffffff;
@@ -611,10 +616,11 @@ div[class*="Netlify"] {
 }
 
 .modal-grid-header {
-  font-weight: 800;
-  font-size: 1rem;
-  color: #94a3b8;
-  padding-bottom: 2px;
+  font-weight: 900;
+  font-size: 1.15rem;
+  color: #cbd5e1;
+  letter-spacing: 0.8px;
+  padding-bottom: 4px;
 }
 
 .rate-edit-row {
@@ -894,17 +900,19 @@ div[class*="Netlify"] {
   .col-type-header,
   .rate-table th.col-type-header {
     width: 30% !important;
-    padding: 5px 2px !important;
-    font-size: 0.78rem !important;
-    letter-spacing: 0.6px !important;
+    padding: 6px 3px !important;
+    font-size: 1.05rem !important;
+    font-weight: 900 !important;
+    letter-spacing: 1px !important;
   }
 
   .col-digit-header,
   .rate-table th.col-digit-header {
     width: 35% !important;
-    padding: 5px 2px !important;
-    font-size: 0.78rem !important;
-    letter-spacing: 0.6px !important;
+    padding: 6px 3px !important;
+    font-size: 1.05rem !important;
+    font-weight: 900 !important;
+    letter-spacing: 1px !important;
   }
 
   .rate-table td {
@@ -1024,6 +1032,190 @@ div[class*="Netlify"] {
     padding: 10px !important;
     font-size: 1rem !important;
   }
+}
+
+/* ===================================================================
+   OFFICIAL MCX STATUS BADGE & ALERT POPUP
+   =================================================================== */
+
+.mcx-live-badge {
+  position: absolute;
+  top: 10px;
+  right: 48px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  z-index: 20;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(4px);
+  cursor: pointer;
+}
+
+.mcx-live-badge.status-live {
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.5);
+  color: #34d399;
+}
+
+.mcx-live-badge.status-failed {
+  background: rgba(239, 68, 68, 0.25);
+  border: 1.5px solid #ef4444;
+  color: #fca5a5;
+  box-shadow: 0 0 12px rgba(239, 68, 68, 0.6);
+  animation: pulse-badge-warning 1.8s infinite ease-in-out;
+}
+
+@keyframes pulse-badge-warning {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.05); }
+}
+
+.mcx-live-badge .pulse-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 6px currentColor;
+}
+
+/* High-Visibility Alert Popup for MCX API Failure */
+.mcx-error-popup {
+  position: fixed;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-25px);
+  background: rgba(153, 27, 27, 0.96);
+  border: 2px solid #ef4444;
+  box-shadow: 0 0 35px rgba(239, 68, 68, 0.7), 0 10px 30px rgba(0, 0, 0, 0.9);
+  color: #ffffff;
+  padding: 14px 22px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  z-index: 99999;
+  max-width: 92vw;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.mcx-error-popup.visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
+}
+
+.error-badge-icon {
+  font-size: 2rem;
+  line-height: 1;
+  animation: pulse-badge-warning 1.5s infinite;
+}
+
+.error-details {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.error-title {
+  font-size: 1.05rem;
+  font-weight: 900;
+  letter-spacing: 1px;
+  color: #fef08a;
+  text-transform: uppercase;
+}
+
+.error-desc {
+  font-size: 0.92rem;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.error-close-btn {
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: #ffffff;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-weight: 800;
+  font-size: 0.85rem;
+  cursor: pointer;
+  margin-left: 10px;
+  white-space: nowrap;
+  transition: background 0.2s;
+}
+
+.error-close-btn:hover,
+.error-close-btn:focus {
+  background: #ffffff;
+  color: #991b1b;
+}
+
+/* Modal Status Bar */
+.modal-mcx-status-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 14px;
+  border-radius: 6px;
+  margin-bottom: 14px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  transition: all 0.3s ease;
+}
+
+.modal-mcx-status-bar.status-live {
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  color: #6ee7b7;
+}
+
+.modal-mcx-status-bar.status-failed {
+  background: rgba(239, 68, 68, 0.2);
+  border: 1.5px solid #ef4444;
+  color: #fca5a5;
+  box-shadow: 0 0 12px rgba(239, 68, 68, 0.35);
+}
+
+/* Toast popup types */
+.tv-toast {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #ffffff;
+  padding: 12px 28px;
+  border-radius: 8px;
+  font-size: 1.25rem;
+  font-weight: bold;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+  z-index: 99999;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+.tv-toast-success {
+  background: rgba(22, 163, 74, 0.95) !important;
+  border: 1px solid #4ade80 !important;
+}
+
+.tv-toast-warning {
+  background: rgba(217, 119, 6, 0.95) !important;
+  border: 1.5px solid #fbbf24 !important;
+  box-shadow: 0 0 25px rgba(217, 119, 6, 0.7) !important;
+}
+
+.tv-toast-error {
+  background: rgba(220, 38, 38, 0.95) !important;
+  border: 1.5px solid #f87171 !important;
+  box-shadow: 0 0 25px rgba(220, 38, 38, 0.8) !important;
 }
 
 </style>
@@ -1250,6 +1442,12 @@ div[class*="Netlify"] {
           </div>
         </footer>
 
+        <!-- Official MCX Status Badge -->
+        <div id="mcxStatusBadge" class="mcx-live-badge status-live" title="Official Indian MCX Commodity Feed Status" onclick="openModal()">
+          <span class="pulse-dot"></span>
+          <span id="mcxBadgeText">MCX LIVE</span>
+        </div>
+
         <!-- Discreet Settings Gear Button (Click or TV Remote trigger) -->
         <button id="openAdminBtn" class="admin-trigger-btn" title="Change Rates (Press Enter or Menu on Remote)">⚙️</button>
         
@@ -1258,6 +1456,16 @@ div[class*="Netlify"] {
 
       </main>
     </div>
+  </div>
+
+  <!-- High-Visibility Alert Popup for MCX API Failure -->
+  <div id="mcxErrorPopup" class="mcx-error-popup">
+    <div class="error-badge-icon">⚠️</div>
+    <div class="error-details">
+      <div class="error-title">OFFICIAL MCX API FAILED</div>
+      <div class="error-desc" id="mcxErrorPopupDesc">Official Indian MCX Commodity API failed to fetch data. Using backup rates.</div>
+    </div>
+    <button class="error-close-btn tv-focusable" onclick="dismissMcxErrorPopup()">✕ DISMISS</button>
   </div>
 
   <!-- ==========================================
@@ -1276,8 +1484,10 @@ div[class*="Netlify"] {
         </div>
       </div>
 
-      <div style="color: #ffd700; font-size: 0.85rem; margin-bottom: 12px; text-align: center; background: rgba(234, 179, 8, 0.12); padding: 6px 12px; border-radius: 6px; border: 1px solid rgba(234, 179, 8, 0.3);">
-        ⚡ <strong>Auto-Purity Calculation:</strong> Changing 24K auto-calculates 22K, 20K, &amp; 18K &bull; Silver is MCX &minus; ₹250 &bull; Purchase is manual (Default 000000).
+      <!-- Official MCX Live Status Bar in Modal -->
+      <div id="modalMcxStatusBar" class="modal-mcx-status-bar status-live">
+        <span id="modalMcxStatusText">🟢 Official Indian MCX Commodity API: Connected &amp; Live</span>
+        <span id="modalMcxStatusTime" style="margin-left: auto; opacity: 0.85; font-size: 0.8rem;"></span>
       </div>
 
       <div class="modal-grid">
@@ -1287,36 +1497,36 @@ div[class*="Netlify"] {
 
         <!-- 24K GOLD -->
         <div class="rate-edit-row">
-          <div class="rate-name-label">24K GOLD (Base)</div>
-          <div><input type="number" inputmode="numeric" id="input_gold24_sale" class="tv-input-box tv-focusable" placeholder="140000"></div>
+          <div class="rate-name-label">24K GOLD</div>
+          <div><input type="number" inputmode="numeric" id="input_gold24_sale" class="tv-input-box tv-focusable" placeholder="150700"></div>
           <div><input type="number" inputmode="numeric" id="input_gold24_purchase" class="tv-input-box tv-focusable" placeholder="000000"></div>
         </div>
 
         <!-- 22K GOLD -->
         <div class="rate-edit-row">
-          <div class="rate-name-label">22K GOLD (91.6%)</div>
-          <div><input type="number" inputmode="numeric" id="input_gold22_sale" class="tv-input-box tv-focusable" placeholder="128300"></div>
+          <div class="rate-name-label">22K GOLD</div>
+          <div><input type="number" inputmode="numeric" id="input_gold22_sale" class="tv-input-box tv-focusable" placeholder="138142"></div>
           <div><input type="number" inputmode="numeric" id="input_gold22_purchase" class="tv-input-box tv-focusable" placeholder="000000"></div>
         </div>
 
         <!-- 20K GOLD -->
         <div class="rate-edit-row">
-          <div class="rate-name-label">20K GOLD (83.3%)</div>
-          <div><input type="number" inputmode="numeric" id="input_gold20_sale" class="tv-input-box tv-focusable" placeholder="116700"></div>
+          <div class="rate-name-label">20K GOLD</div>
+          <div><input type="number" inputmode="numeric" id="input_gold20_sale" class="tv-input-box tv-focusable" placeholder="125583"></div>
           <div><input type="number" inputmode="numeric" id="input_gold20_purchase" class="tv-input-box tv-focusable" placeholder="000000"></div>
         </div>
 
         <!-- 18K GOLD -->
         <div class="rate-edit-row">
-          <div class="rate-name-label">18K GOLD (75.0%)</div>
-          <div><input type="number" inputmode="numeric" id="input_gold18_sale" class="tv-input-box tv-focusable" placeholder="105000"></div>
+          <div class="rate-name-label">18K GOLD</div>
+          <div><input type="number" inputmode="numeric" id="input_gold18_sale" class="tv-input-box tv-focusable" placeholder="113025"></div>
           <div><input type="number" inputmode="numeric" id="input_gold18_purchase" class="tv-input-box tv-focusable" placeholder="000000"></div>
         </div>
 
         <!-- SILVER -->
         <div class="rate-edit-row">
-          <div class="rate-name-label">SILVER (MCX - 250)</div>
-          <div><input type="number" inputmode="numeric" id="input_silver_sale" class="tv-input-box tv-focusable" placeholder="206000"></div>
+          <div class="rate-name-label">SILVER</div>
+          <div><input type="number" inputmode="numeric" id="input_silver_sale" class="tv-input-box tv-focusable" placeholder="002076"></div>
           <div><input type="number" inputmode="numeric" id="input_silver_purchase" class="tv-input-box tv-focusable" placeholder="000000"></div>
         </div>
       </div>
@@ -1341,15 +1551,15 @@ div[class*="Netlify"] {
 
 // Default rates (6 digits format, e.g., 140000, 000000)
 const DEFAULT_RATES = {
-  gold24_sale: "140000",
+  gold24_sale: "151600",
   gold24_purchase: "000000",
-  gold22_sale: "128300",
+  gold22_sale: "138967",
   gold22_purchase: "000000",
-  gold20_sale: "116700",
+  gold20_sale: "126333",
   gold20_purchase: "000000",
-  gold18_sale: "105000",
+  gold18_sale: "113700",
   gold18_purchase: "000000",
-  silver_sale: "206000",
+  silver_sale: "002100",
   silver_purchase: "000000"
 };
 
@@ -1462,36 +1672,41 @@ function renderClockGroup(containerId, strPair, hasDot = true) {
 }
 
 // State management
-let currentRates = { ...DEFAULT_RATES };
+let currentRates = Object.assign({}, DEFAULT_RATES);
 
 // Round to nearest 100
 function roundTo100(val) {
   return Math.round(Number(val) / 100) * 100;
 }
 
-// Auto-calculate 22K, 20K, 18K from 24K using exact mathematical purity ratio
+// Auto-calculate 22K, 20K, 18K from 24K using exact mathematical purity ratio (no roundoff)
 function computeDerivedGoldFrom24K(gold24Price) {
   const p = Number(gold24Price);
   if (!p || isNaN(p)) return {};
   return {
-    gold22_sale: String(roundTo100(p * 22 / 24)).padStart(6, '0'),
-    gold20_sale: String(roundTo100(p * 20 / 24)).padStart(6, '0'),
-    gold18_sale: String(roundTo100(p * 18 / 24)).padStart(6, '0')
+    gold22_sale: String(Math.round(p * 22 / 24)).padStart(6, '0'),
+    gold20_sale: String(Math.round(p * 20 / 24)).padStart(6, '0'),
+    gold18_sale: String(Math.round(p * 18 / 24)).padStart(6, '0')
   };
 }
 
-// Silver sale rate formula: MCX Silver - 250, rounded to nearest 100
+// Silver sale rate formula for 10 grams: (MCX Silver 10g - 250) (no roundoff)
 function computeSilverSaleRate(mcxSilver) {
-  const s = Number(mcxSilver);
-  if (!s || isNaN(s)) return "000000";
-  return String(roundTo100(s - 250)).padStart(6, '0');
+  let s = Number(mcxSilver);
+  if (!s || isNaN(s)) return "002076";
+  // If a 1kg price (> 10000) was passed, normalize to 10g
+  if (s > 10000) {
+    s = s / 100;
+  }
+  const rate10g = Math.round(s - 250);
+  return String(Math.max(0, rate10g)).padStart(6, '0');
 }
 
 function loadRates() {
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
-      currentRates = { ...DEFAULT_RATES, ...JSON.parse(saved) };
+      currentRates = Object.assign({}, DEFAULT_RATES, JSON.parse(saved));
     }
     // Clean old dummy purchase rates so they default to 000000
     ['gold24', 'gold22', 'gold20', 'gold18', 'silver'].forEach(k => {
@@ -1500,6 +1715,18 @@ function loadRates() {
         currentRates[pKey] = "000000";
       }
     });
+    // If silver_sale is an old 1kg rate (> 10000), update it to 10g rate
+    if (Number(currentRates.silver_sale) > 10000) {
+      currentRates.silver_sale = "002100";
+    }
+    // If gold24_sale is still the old 140000, update to 150700
+    if (currentRates.gold24_sale === "140000" || currentRates.gold24_sale === "074500") {
+      currentRates.gold24_sale = "150700";
+      const derived = computeDerivedGoldFrom24K("150700");
+      currentRates.gold22_sale = derived.gold22_sale;
+      currentRates.gold20_sale = derived.gold20_sale;
+      currentRates.gold18_sale = derived.gold18_sale;
+    }
   } catch (e) {
     console.warn("Could not load from localStorage, using defaults", e);
   }
@@ -1507,7 +1734,7 @@ function loadRates() {
 
 function saveRates(newRates) {
   try {
-    currentRates = { ...currentRates, ...newRates };
+    currentRates = Object.assign({}, currentRates, newRates);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(currentRates));
     renderAllRates();
     showToastNotification("Rates Updated Successfully!");
@@ -1533,6 +1760,74 @@ function renderAllRates() {
   renderLEDString("silver_purchase_led", currentRates.silver_purchase, true);
 }
 
+// Official Indian MCX Status & Alert Notification Controls
+let errorPopupTimeoutId = null;
+
+function showMcxErrorPopup(msg) {
+  const popup = document.getElementById("mcxErrorPopup");
+  const desc = document.getElementById("mcxErrorPopupDesc");
+  if (desc && msg) {
+    desc.textContent = msg;
+  }
+  if (popup) {
+    popup.classList.add("visible");
+    if (errorPopupTimeoutId) clearTimeout(errorPopupTimeoutId);
+    errorPopupTimeoutId = setTimeout(function() {
+      dismissMcxErrorPopup();
+    }, 14000);
+  }
+}
+
+window.dismissMcxErrorPopup = function() {
+  const popup = document.getElementById("mcxErrorPopup");
+  if (popup) {
+    popup.classList.remove("visible");
+  }
+  if (errorPopupTimeoutId) {
+    clearTimeout(errorPopupTimeoutId);
+    errorPopupTimeoutId = null;
+  }
+};
+
+function updateMcxStatusUI(status, message, timeStr) {
+  const badge = document.getElementById("mcxStatusBadge");
+  const badgeText = document.getElementById("mcxBadgeText");
+  const modalStatusBar = document.getElementById("modalMcxStatusBar");
+  const modalStatusText = document.getElementById("modalMcxStatusText");
+  const modalStatusTime = document.getElementById("modalMcxStatusTime");
+
+  const now = new Date();
+  const formattedTime = timeStr || (
+    String(now.getHours()).padStart(2, '0') + ":" +
+    String(now.getMinutes()).padStart(2, '0') + ":" +
+    String(now.getSeconds()).padStart(2, '0')
+  );
+
+  if (status === "live") {
+    if (badge) {
+      badge.className = "mcx-live-badge status-live";
+      badge.title = "Official Indian MCX Commodity Feed: Connected";
+    }
+    if (badgeText) badgeText.textContent = "MCX LIVE";
+    if (modalStatusBar) modalStatusBar.className = "modal-mcx-status-bar status-live";
+    if (modalStatusText) modalStatusText.innerHTML = "🟢 Official Indian MCX Commodity API: Connected &amp; Live";
+    if (modalStatusTime) modalStatusTime.textContent = "Last Sync: " + formattedTime;
+
+    dismissMcxErrorPopup();
+  } else {
+    if (badge) {
+      badge.className = "mcx-live-badge status-failed";
+      badge.title = "Official Indian MCX Commodity API Failed: " + (message || "Feed Offline");
+    }
+    if (badgeText) badgeText.textContent = "⚠️ MCX OFFLINE";
+    if (modalStatusBar) modalStatusBar.className = "modal-mcx-status-bar status-failed";
+    if (modalStatusText) modalStatusText.innerHTML = "⚠️ Official Indian MCX Commodity API Failed! (" + (message || "Using Backup Rates") + ")";
+    if (modalStatusTime) modalStatusTime.textContent = "Failed: " + formattedTime;
+
+    showMcxErrorPopup(message || "Official Indian MCX Commodity API failed to fetch data. Using backup rates.");
+  }
+}
+
 // Live MCX Fetcher with dual-strategy (Netlify Function + Direct Fallback)
 async function fetchLiveMCXRates(showToast = false) {
   const syncBtn = document.getElementById("syncMcxBtn");
@@ -1541,22 +1836,35 @@ async function fetchLiveMCXRates(showToast = false) {
     syncBtn.textContent = "⏳ SYNCING...";
   }
 
+  let officialFeedSuccess = false;
+  let data = null;
+
   try {
-    let data = null;
     try {
       const res = await fetch('/api/mcx-rates');
-      if (res.ok) data = await res.json();
+      if (res.ok) {
+        data = await res.json();
+        if (data && data.source === "real_mcx_exchange") {
+          officialFeedSuccess = true;
+        }
+      }
     } catch (e) {}
 
     if (!data || !data.gold24) {
       try {
         const res2 = await fetch('/.netlify/functions/mcx-rates');
-        if (res2.ok) data = await res2.json();
+        if (res2.ok) {
+          data = await res2.json();
+          if (data && data.source === "real_mcx_exchange") {
+            officialFeedSuccess = true;
+          }
+        }
       } catch (e) {}
     }
 
     // Direct client fallback if running offline or standalone
     if (!data || !data.gold24) {
+      officialFeedSuccess = false;
       const [goldRes, inrRes, silverRes] = await Promise.all([
         fetch('https://api.gold-api.com/price/XAU'),
         fetch('https://open.er-api.com/v6/latest/USD'),
@@ -1565,18 +1873,20 @@ async function fetchLiveMCXRates(showToast = false) {
       const goldData = await goldRes.json();
       const inrData = await inrRes.json();
       const silverData = await silverRes.json();
-      const usdinr = inrData?.rates?.INR || 95.91;
-      const goldUsd = goldData?.price || 4330;
-      const silverUsd = silverData?.price || 63.5;
-      const gold24 = roundTo100((goldUsd / 31.1034768) * 10 * usdinr * 1.06);
-      const silver = roundTo100((silverUsd / 31.1034768) * 1000 * usdinr * 1.06);
-      data = { gold24, silver };
+      const usdinr = (inrData && inrData.rates && inrData.rates.INR) ? inrData.rates.INR : 95.91;
+      const goldUsd = (goldData && goldData.price) ? goldData.price : 4320;
+      const silverUsd = (silverData && silverData.price) ? silverData.price : 63.5;
+      const gold24 = Math.round((goldUsd / 31.1034768) * 10 * usdinr * 1.136);
+      const rawSilver10g = (silverUsd / 31.1034768) * 10 * usdinr;
+      const silver10g = Math.round(rawSilver10g * 1.21);
+      const silverSale = Math.round(silver10g - 250);
+      data = { gold24, silver10g, silver: silver10g * 100, silverSale, source: "spot_client_fallback" };
     }
 
     if (data && data.gold24) {
-      const gold24Str = String(roundTo100(data.gold24)).padStart(6, '0');
+      const gold24Str = String(Math.round(data.gold24)).padStart(6, '0');
       const derived = computeDerivedGoldFrom24K(gold24Str);
-      const silverSaleStr = computeSilverSaleRate(data.silver || 206200);
+      const silverSaleStr = data.silverSale ? String(Math.round(data.silverSale)).padStart(6, '0') : computeSilverSaleRate(data.silver10g || data.silver || 2320);
 
       currentRates.gold24_sale = gold24Str;
       currentRates.gold22_sale = derived.gold22_sale;
@@ -1586,22 +1896,37 @@ async function fetchLiveMCXRates(showToast = false) {
 
       // Purchase rates remain manual / default to 000000
       ['gold24', 'gold22', 'gold20', 'gold18', 'silver'].forEach(k => {
-        if (!currentRates[`${k}_purchase`]) currentRates[`${k}_purchase`] = "000000";
+        if (!currentRates[k + '_purchase']) currentRates[k + '_purchase'] = "000000";
       });
 
       localStorage.setItem(STORAGE_KEY, JSON.stringify(currentRates));
       renderAllRates();
       updateModalInputs();
 
-      if (showToast) {
-        showToastNotification("Live MCX Rates Applied!");
+      if (officialFeedSuccess) {
+        updateMcxStatusUI("live");
+        if (showToast) {
+          showToastNotification("Official MCX Rates Synced!", "success");
+        }
+        console.log("[MCX API] Official exchange rates applied:", currentRates);
+      } else {
+        updateMcxStatusUI("failed", "Official Indian MCX Commodity API failed to fetch data! Using backup rates.");
+        if (showToast) {
+          showToastNotification("Official MCX API Failed! Using Backup Rates", "warning", 5000);
+        }
+        console.warn("[MCX API] Official exchange feed failed, backup applied:", currentRates);
       }
-      console.log("[MCX API] Live rates applied:", currentRates);
+    } else {
+      updateMcxStatusUI("failed", "Official Indian MCX Commodity API failed to return data!");
+      if (showToast) {
+        showToastNotification("Official MCX API Failed! Using Stored Rates", "error", 5000);
+      }
     }
   } catch (err) {
     console.warn("[MCX API] Could not fetch live rates:", err);
+    updateMcxStatusUI("failed", "Network Error: Official Indian MCX Commodity API unreachable!");
     if (showToast) {
-      showToastNotification("Offline: Using Stored Rates");
+      showToastNotification("Official MCX API Unreachable! Using Stored Rates", "error", 5000);
     }
   } finally {
     if (syncBtn) {
@@ -1683,6 +2008,15 @@ function handleSaveForm() {
 
 // TV Remote Key Handling (D-Pad & Shortcuts)
 window.addEventListener("keydown", (e) => {
+  const errorPopup = document.getElementById("mcxErrorPopup");
+  if (errorPopup && errorPopup.classList.contains("visible")) {
+    if (e.key === "Escape" || e.keyCode === 27 || e.key === "Enter" || e.keyCode === 13 || e.keyCode === 10009 || e.keyCode === 461) {
+      e.preventDefault();
+      dismissMcxErrorPopup();
+      return;
+    }
+  }
+
   const isModalOpen = modalBackdrop.classList.contains("active");
   
   // Android TV remote Back / Escape codes: 27, 8, 4, 10009, 461
@@ -1759,32 +2093,27 @@ function handleModalNavigation(e) {
   }
 }
 
-// Toast notification
-function showToastNotification(msg) {
+// Toast notification (Success / Warning / Error)
+let toastTimeoutId = null;
+function showToastNotification(msg, type, duration) {
+  if (typeof type === "undefined") type = "success";
+  if (typeof duration === "undefined") duration = 3500;
+
   let toast = document.getElementById("tvToast");
   if (!toast) {
     toast = document.createElement("div");
     toast.id = "tvToast";
-    toast.style.position = "fixed";
-    toast.style.bottom = "30px";
-    toast.style.left = "50%";
-    toast.style.transform = "translateX(-50%)";
-    toast.style.background = "rgba(22, 163, 74, 0.95)";
-    toast.style.color = "#ffffff";
-    toast.style.padding = "12px 28px";
-    toast.style.borderRadius = "8px";
-    toast.style.fontSize = "1.3rem";
-    toast.style.fontWeight = "bold";
-    toast.style.boxShadow = "0 0 20px rgba(0,0,0,0.8)";
-    toast.style.zIndex = "999";
-    toast.style.transition = "opacity 0.4s ease";
     document.body.appendChild(toast);
   }
+  const typeClass = type === "error" ? "tv-toast-error" : (type === "warning" ? "tv-toast-warning" : "tv-toast-success");
+  toast.className = "tv-toast " + typeClass;
   toast.innerText = msg;
   toast.style.opacity = "1";
-  setTimeout(() => {
-    toast.style.opacity = "0";
-  }, 2500);
+
+  if (toastTimeoutId) clearTimeout(toastTimeoutId);
+  toastTimeoutId = setTimeout(function() {
+    if (toast) toast.style.opacity = "0";
+  }, duration);
 }
 
 // Android TV Wake Lock (prevents TV from sleeping)
@@ -1843,8 +2172,8 @@ window.triggerBurnInShiftTest = function() {
   return `Current offset: ${JSON.stringify(BURN_IN_ORBIT[burnInCycleIndex])}`;
 };
 
-// Initialize everything on DOM ready
-document.addEventListener("DOMContentLoaded", () => {
+// Initialize everything on DOM ready or immediately if already loaded
+function initApp() {
   loadRates();
   renderAllRates();
   updateClockAndDate();
@@ -1878,7 +2207,10 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Double-click anywhere on the board also opens the rate updater
-  document.querySelector(".board-surface").addEventListener("dblclick", openModal);
+  const boardSurface = document.querySelector(".board-surface");
+  if (boardSurface) {
+    boardSurface.addEventListener("dblclick", openModal);
+  }
   
   requestScreenWakeLock();
   initBurnInProtection();
@@ -1894,7 +2226,13 @@ document.addEventListener("DOMContentLoaded", () => {
     if (window.location.hash === '#admin') openModal();
     else closeModal();
   });
-});
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initApp);
+} else {
+  initApp();
+}
 
 // Continuously eradicate Netlify Drawer / Feedback Widget
 function purgeNetlifyToolbar() {

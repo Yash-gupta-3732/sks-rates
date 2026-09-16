@@ -215,6 +215,74 @@ function renderAllRates() {
   renderLEDString("silver_purchase_led", currentRates.silver_purchase, true);
 }
 
+// Official Indian MCX Status & Alert Notification Controls
+let errorPopupTimeoutId = null;
+
+function showMcxErrorPopup(msg) {
+  const popup = document.getElementById("mcxErrorPopup");
+  const desc = document.getElementById("mcxErrorPopupDesc");
+  if (desc && msg) {
+    desc.textContent = msg;
+  }
+  if (popup) {
+    popup.classList.add("visible");
+    if (errorPopupTimeoutId) clearTimeout(errorPopupTimeoutId);
+    errorPopupTimeoutId = setTimeout(function() {
+      dismissMcxErrorPopup();
+    }, 14000);
+  }
+}
+
+window.dismissMcxErrorPopup = function() {
+  const popup = document.getElementById("mcxErrorPopup");
+  if (popup) {
+    popup.classList.remove("visible");
+  }
+  if (errorPopupTimeoutId) {
+    clearTimeout(errorPopupTimeoutId);
+    errorPopupTimeoutId = null;
+  }
+};
+
+function updateMcxStatusUI(status, message, timeStr) {
+  const badge = document.getElementById("mcxStatusBadge");
+  const badgeText = document.getElementById("mcxBadgeText");
+  const modalStatusBar = document.getElementById("modalMcxStatusBar");
+  const modalStatusText = document.getElementById("modalMcxStatusText");
+  const modalStatusTime = document.getElementById("modalMcxStatusTime");
+
+  const now = new Date();
+  const formattedTime = timeStr || (
+    String(now.getHours()).padStart(2, '0') + ":" +
+    String(now.getMinutes()).padStart(2, '0') + ":" +
+    String(now.getSeconds()).padStart(2, '0')
+  );
+
+  if (status === "live") {
+    if (badge) {
+      badge.className = "mcx-live-badge status-live";
+      badge.title = "Official Indian MCX Commodity Feed: Connected";
+    }
+    if (badgeText) badgeText.textContent = "MCX LIVE";
+    if (modalStatusBar) modalStatusBar.className = "modal-mcx-status-bar status-live";
+    if (modalStatusText) modalStatusText.innerHTML = "🟢 Official Indian MCX Commodity API: Connected &amp; Live";
+    if (modalStatusTime) modalStatusTime.textContent = "Last Sync: " + formattedTime;
+
+    dismissMcxErrorPopup();
+  } else {
+    if (badge) {
+      badge.className = "mcx-live-badge status-failed";
+      badge.title = "Official Indian MCX Commodity API Failed: " + (message || "Feed Offline");
+    }
+    if (badgeText) badgeText.textContent = "⚠️ MCX OFFLINE";
+    if (modalStatusBar) modalStatusBar.className = "modal-mcx-status-bar status-failed";
+    if (modalStatusText) modalStatusText.innerHTML = "⚠️ Official Indian MCX Commodity API Failed! (" + (message || "Using Backup Rates") + ")";
+    if (modalStatusTime) modalStatusTime.textContent = "Failed: " + formattedTime;
+
+    showMcxErrorPopup(message || "Official Indian MCX Commodity API failed to fetch data. Using backup rates.");
+  }
+}
+
 // Live MCX Fetcher with dual-strategy (Netlify Function + Direct Fallback)
 async function fetchLiveMCXRates(showToast = false) {
   const syncBtn = document.getElementById("syncMcxBtn");
@@ -223,22 +291,35 @@ async function fetchLiveMCXRates(showToast = false) {
     syncBtn.textContent = "⏳ SYNCING...";
   }
 
+  let officialFeedSuccess = false;
+  let data = null;
+
   try {
-    let data = null;
     try {
       const res = await fetch('/api/mcx-rates');
-      if (res.ok) data = await res.json();
+      if (res.ok) {
+        data = await res.json();
+        if (data && data.source === "real_mcx_exchange") {
+          officialFeedSuccess = true;
+        }
+      }
     } catch (e) {}
 
     if (!data || !data.gold24) {
       try {
         const res2 = await fetch('/.netlify/functions/mcx-rates');
-        if (res2.ok) data = await res2.json();
+        if (res2.ok) {
+          data = await res2.json();
+          if (data && data.source === "real_mcx_exchange") {
+            officialFeedSuccess = true;
+          }
+        }
       } catch (e) {}
     }
 
     // Direct client fallback if running offline or standalone
     if (!data || !data.gold24) {
+      officialFeedSuccess = false;
       const [goldRes, inrRes, silverRes] = await Promise.all([
         fetch('https://api.gold-api.com/price/XAU'),
         fetch('https://open.er-api.com/v6/latest/USD'),
@@ -254,7 +335,7 @@ async function fetchLiveMCXRates(showToast = false) {
       const rawSilver10g = (silverUsd / 31.1034768) * 10 * usdinr;
       const silver10g = Math.round(rawSilver10g * 1.21);
       const silverSale = Math.round(silver10g - 250);
-      data = { gold24, silver10g, silver: silver10g * 100, silverSale };
+      data = { gold24, silver10g, silver: silver10g * 100, silverSale, source: "spot_client_fallback" };
     }
 
     if (data && data.gold24) {
@@ -270,22 +351,37 @@ async function fetchLiveMCXRates(showToast = false) {
 
       // Purchase rates remain manual / default to 000000
       ['gold24', 'gold22', 'gold20', 'gold18', 'silver'].forEach(k => {
-        if (!currentRates[`${k}_purchase`]) currentRates[`${k}_purchase`] = "000000";
+        if (!currentRates[k + '_purchase']) currentRates[k + '_purchase'] = "000000";
       });
 
       localStorage.setItem(STORAGE_KEY, JSON.stringify(currentRates));
       renderAllRates();
       updateModalInputs();
 
-      if (showToast) {
-        showToastNotification("Live MCX Rates Applied!");
+      if (officialFeedSuccess) {
+        updateMcxStatusUI("live");
+        if (showToast) {
+          showToastNotification("Official MCX Rates Synced!", "success");
+        }
+        console.log("[MCX API] Official exchange rates applied:", currentRates);
+      } else {
+        updateMcxStatusUI("failed", "Official Indian MCX Commodity API failed to fetch data! Using backup rates.");
+        if (showToast) {
+          showToastNotification("Official MCX API Failed! Using Backup Rates", "warning", 5000);
+        }
+        console.warn("[MCX API] Official exchange feed failed, backup applied:", currentRates);
       }
-      console.log("[MCX API] Live rates applied:", currentRates);
+    } else {
+      updateMcxStatusUI("failed", "Official Indian MCX Commodity API failed to return data!");
+      if (showToast) {
+        showToastNotification("Official MCX API Failed! Using Stored Rates", "error", 5000);
+      }
     }
   } catch (err) {
     console.warn("[MCX API] Could not fetch live rates:", err);
+    updateMcxStatusUI("failed", "Network Error: Official Indian MCX Commodity API unreachable!");
     if (showToast) {
-      showToastNotification("Offline: Using Stored Rates");
+      showToastNotification("Official MCX API Unreachable! Using Stored Rates", "error", 5000);
     }
   } finally {
     if (syncBtn) {
@@ -367,6 +463,15 @@ function handleSaveForm() {
 
 // TV Remote Key Handling (D-Pad & Shortcuts)
 window.addEventListener("keydown", (e) => {
+  const errorPopup = document.getElementById("mcxErrorPopup");
+  if (errorPopup && errorPopup.classList.contains("visible")) {
+    if (e.key === "Escape" || e.keyCode === 27 || e.key === "Enter" || e.keyCode === 13 || e.keyCode === 10009 || e.keyCode === 461) {
+      e.preventDefault();
+      dismissMcxErrorPopup();
+      return;
+    }
+  }
+
   const isModalOpen = modalBackdrop.classList.contains("active");
   
   // Android TV remote Back / Escape codes: 27, 8, 4, 10009, 461
@@ -443,32 +548,27 @@ function handleModalNavigation(e) {
   }
 }
 
-// Toast notification
-function showToastNotification(msg) {
+// Toast notification (Success / Warning / Error)
+let toastTimeoutId = null;
+function showToastNotification(msg, type, duration) {
+  if (typeof type === "undefined") type = "success";
+  if (typeof duration === "undefined") duration = 3500;
+
   let toast = document.getElementById("tvToast");
   if (!toast) {
     toast = document.createElement("div");
     toast.id = "tvToast";
-    toast.style.position = "fixed";
-    toast.style.bottom = "30px";
-    toast.style.left = "50%";
-    toast.style.transform = "translateX(-50%)";
-    toast.style.background = "rgba(22, 163, 74, 0.95)";
-    toast.style.color = "#ffffff";
-    toast.style.padding = "12px 28px";
-    toast.style.borderRadius = "8px";
-    toast.style.fontSize = "1.3rem";
-    toast.style.fontWeight = "bold";
-    toast.style.boxShadow = "0 0 20px rgba(0,0,0,0.8)";
-    toast.style.zIndex = "999";
-    toast.style.transition = "opacity 0.4s ease";
     document.body.appendChild(toast);
   }
+  const typeClass = type === "error" ? "tv-toast-error" : (type === "warning" ? "tv-toast-warning" : "tv-toast-success");
+  toast.className = "tv-toast " + typeClass;
   toast.innerText = msg;
   toast.style.opacity = "1";
-  setTimeout(() => {
-    toast.style.opacity = "0";
-  }, 2500);
+
+  if (toastTimeoutId) clearTimeout(toastTimeoutId);
+  toastTimeoutId = setTimeout(function() {
+    if (toast) toast.style.opacity = "0";
+  }, duration);
 }
 
 // Android TV Wake Lock (prevents TV from sleeping)

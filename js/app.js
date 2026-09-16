@@ -6,15 +6,15 @@
 
 // Default rates (6 digits format, e.g., 140000, 000000)
 const DEFAULT_RATES = {
-  gold24_sale: "150700",
+  gold24_sale: "151600",
   gold24_purchase: "000000",
-  gold22_sale: "138142",
+  gold22_sale: "138967",
   gold22_purchase: "000000",
-  gold20_sale: "125583",
+  gold20_sale: "126333",
   gold20_purchase: "000000",
-  gold18_sale: "113025",
+  gold18_sale: "113700",
   gold18_purchase: "000000",
-  silver_sale: "002076",
+  silver_sale: "002100",
   silver_purchase: "000000"
 };
 
@@ -248,11 +248,11 @@ async function fetchLiveMCXRates(showToast = false) {
       const inrData = await inrRes.json();
       const silverData = await silverRes.json();
       const usdinr = (inrData && inrData.rates && inrData.rates.INR) ? inrData.rates.INR : 95.91;
-      const goldUsd = (goldData && goldData.price) ? goldData.price : 4288;
+      const goldUsd = (goldData && goldData.price) ? goldData.price : 4320;
       const silverUsd = (silverData && silverData.price) ? silverData.price : 63.5;
-      const gold24 = Math.round((goldUsd / 31.1034768) * 10 * usdinr * 1.1425);
+      const gold24 = Math.round((goldUsd / 31.1034768) * 10 * usdinr * 1.136);
       const rawSilver10g = (silverUsd / 31.1034768) * 10 * usdinr;
-      const silver10g = Math.round(rawSilver10g * 1.20);
+      const silver10g = Math.round(rawSilver10g * 1.21);
       const silverSale = Math.round(silver10g - 250);
       data = { gold24, silver10g, silver: silver10g * 100, silverSale };
     }

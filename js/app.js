@@ -500,7 +500,7 @@ window.addEventListener("keydown", (e) => {
 
 // Grid navigation for Android TV remote D-Pad
 function handleModalNavigation(e) {
-  const inputs = Array.from(document.querySelectorAll(".tv-focusable"));
+  const inputs = Array.from(document.querySelectorAll("#adminModal .modal-grid input, #adminModal .modal-actions button"));
   const currentIndex = inputs.indexOf(document.activeElement);
   
   if (currentIndex === -1) return;

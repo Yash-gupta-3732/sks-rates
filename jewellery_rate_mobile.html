@@ -337,7 +337,8 @@ div[class*="Netlify"] {
   min-height: 0;
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
+  justify-content: center;
+  gap: 1.2vh;
   width: 100%;
   z-index: 2;
   margin: 0.4vh 0;
@@ -347,13 +348,13 @@ div[class*="Netlify"] {
 .rate-header-title {
   color: #fff4a3;
   font-size: 1.4rem;
-  font-size: 2vw;
-  font-size: clamp(1.1rem, 2vw, 1.8rem);
+  font-size: 2.1vw;
+  font-size: clamp(1.2rem, 2.1vw, 1.9rem);
   font-weight: 900;
   text-align: center;
   letter-spacing: 3.5px;
   text-shadow: 0 2px 5px rgba(0, 0, 0, 0.9), 0 0 14px rgba(255, 215, 0, 0.4);
-  margin-bottom: 0.5vh;
+  margin-bottom: 0.2vh;
   margin-top: 0.2vh;
   flex-shrink: 0;
 }
@@ -372,7 +373,7 @@ div[class*="Netlify"] {
 .col-digit-header,
 .rate-table th {
   border: 1.5px solid var(--gold-border);
-  padding: 0.8vh 0.8vw;
+  padding: 1.1vh 0.8vw;
   color: #ffffff;
   font-size: 1.85rem;
   font-size: 2.5vw;
@@ -386,7 +387,7 @@ div[class*="Netlify"] {
 
 .rate-table td {
   border: 1.5px solid var(--gold-border);
-  padding: 0.45vh 0.8vw;
+  padding: 0.9vh 0.8vw;
   vertical-align: middle;
 }
 
@@ -398,9 +399,9 @@ div[class*="Netlify"] {
 .rate-col-type {
   width: 28%;
   color: #ffffff;
-  font-size: 1.4rem;
-  font-size: 2.1vw;
-  font-size: clamp(1.15rem, 2.1vw, 1.85rem);
+  font-size: 1.5rem;
+  font-size: 2.2vw;
+  font-size: clamp(1.25rem, 2.2vw, 2rem);
   font-weight: 900;
   letter-spacing: 1.4px;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
@@ -418,7 +419,7 @@ div[class*="Netlify"] {
   background: #010204;
   border: 1.5px solid #242e40;
   border-radius: 6px;
-  padding: 0.35vh 0.7vw;
+  padding: 0.45vh 0.7vw;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -435,9 +436,9 @@ div[class*="Netlify"] {
 }
 
 .led-digit-svg {
-  height: 3.2rem;
-  height: 5.2vh;
-  height: clamp(2.2rem, 5.2vh, 3.8rem);
+  height: 3.4rem;
+  height: 5.6vh;
+  height: clamp(2.4rem, 5.6vh, 4.1rem);
   width: auto;
   overflow: visible;
 }
@@ -1375,18 +1376,7 @@ div[class*="Netlify"] {
               </tr>
             </thead>
             <tbody>
-              <!-- Row 1: 24K GOLD -->
-              <tr>
-                <td class="rate-col-type">24K GOLD</td>
-                <td class="rate-col-digit">
-                  <div class="rate-led-holder" id="gold24_sale_led"></div>
-                </td>
-                <td class="rate-col-digit">
-                  <div class="rate-led-holder" id="gold24_purchase_led"></div>
-                </td>
-              </tr>
-
-              <!-- Row 2: 22K GOLD -->
+              <!-- Row 1: 22K GOLD -->
               <tr>
                 <td class="rate-col-type">22K GOLD</td>
                 <td class="rate-col-digit">
@@ -2039,7 +2029,7 @@ window.addEventListener("keydown", (e) => {
 
 // Grid navigation for Android TV remote D-Pad
 function handleModalNavigation(e) {
-  const inputs = Array.from(document.querySelectorAll(".tv-focusable"));
+  const inputs = Array.from(document.querySelectorAll("#adminModal .modal-grid input, #adminModal .modal-actions button"));
   const currentIndex = inputs.indexOf(document.activeElement);
   
   if (currentIndex === -1) return;

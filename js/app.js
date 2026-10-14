@@ -7,15 +7,15 @@
 // Toggle to temporarily disable API and use fixed gold rates
 const USE_LIVE_MCX_API = false;
 
-// Default rates (6 digits format, e.g., 147000, 000000)
+// Default rates (6 digits format, e.g., 142000, 000000)
 const DEFAULT_RATES = {
-  gold24_sale: "147000",
+  gold24_sale: "142000",
   gold24_purchase: "000000",
-  gold22_sale: "134750",
+  gold22_sale: "130167",
   gold22_purchase: "000000",
-  gold20_sale: "122500",
+  gold20_sale: "118333",
   gold20_purchase: "000000",
-  gold18_sale: "110250",
+  gold18_sale: "106500",
   gold18_purchase: "000000",
   silver_sale: "002100",
   silver_purchase: "000000"
@@ -178,10 +178,10 @@ function loadRates() {
       currentRates.silver_sale = "002100";
     }
 
-    // Apply fixed 24K gold rate of 147000 and derive all other gold rates (do not touch silver)
+    // Apply fixed 24K gold rate of 142000 and derive all other gold rates (do not touch silver)
     if (!USE_LIVE_MCX_API) {
-      currentRates.gold24_sale = "147000";
-      const derived = computeDerivedGoldFrom24K("147000");
+      currentRates.gold24_sale = "142000";
+      const derived = computeDerivedGoldFrom24K("142000");
       currentRates.gold22_sale = derived.gold22_sale;
       currentRates.gold20_sale = derived.gold20_sale;
       currentRates.gold18_sale = derived.gold18_sale;
@@ -293,9 +293,9 @@ async function fetchLiveMCXRates(showToast = false) {
   const syncBtn = document.getElementById("syncMcxBtn");
 
   if (!USE_LIVE_MCX_API) {
-    // Keep fixed gold rates based on 147000, do not touch silver
-    currentRates.gold24_sale = "147000";
-    const derived = computeDerivedGoldFrom24K("147000");
+    // Keep fixed gold rates based on 142000, do not touch silver
+    currentRates.gold24_sale = "142000";
+    const derived = computeDerivedGoldFrom24K("142000");
     currentRates.gold22_sale = derived.gold22_sale;
     currentRates.gold20_sale = derived.gold20_sale;
     currentRates.gold18_sale = derived.gold18_sale;
@@ -308,15 +308,15 @@ async function fetchLiveMCXRates(showToast = false) {
     const modalStatusText = document.getElementById("modalMcxStatusText");
     const modalStatusTime = document.getElementById("modalMcxStatusTime");
     if (modalStatusBar) modalStatusBar.className = "modal-mcx-status-bar status-live";
-    if (modalStatusText) modalStatusText.innerHTML = "📌 Fixed Mode: 24K Gold @ ₹1,47,000 (API Paused)";
-    if (modalStatusTime) modalStatusTime.textContent = "Base: ₹1,47,000";
+    if (modalStatusText) modalStatusText.innerHTML = "📌 Fixed Mode: 24K Gold @ ₹1,42,000 (API Paused)";
+    if (modalStatusTime) modalStatusTime.textContent = "Base: ₹1,42,000";
 
     dismissMcxErrorPopup();
 
     if (showToast) {
-      showToastNotification("Fixed Mode: 24K Gold is set to ₹1,47,000", "warning");
+      showToastNotification("Fixed Mode: 24K Gold is set to ₹1,42,000", "warning");
     }
-    console.log("[Rate Engine] Fixed Mode: 24K Gold = 147000 (API paused). Derived gold rates applied:", currentRates);
+    console.log("[Rate Engine] Fixed Mode: 24K Gold = 142000 (API paused). Derived gold rates applied:", currentRates);
     return;
   }
 

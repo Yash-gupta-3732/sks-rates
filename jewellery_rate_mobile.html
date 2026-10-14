@@ -1482,28 +1482,28 @@ div[class*="Netlify"] {
         <!-- 24K GOLD -->
         <div class="rate-edit-row">
           <div class="rate-name-label">24K GOLD</div>
-          <div><input type="number" inputmode="numeric" id="input_gold24_sale" class="tv-input-box tv-focusable" placeholder="147000"></div>
+          <div><input type="number" inputmode="numeric" id="input_gold24_sale" class="tv-input-box tv-focusable" placeholder="142000"></div>
           <div><input type="number" inputmode="numeric" id="input_gold24_purchase" class="tv-input-box tv-focusable" placeholder="000000"></div>
         </div>
 
         <!-- 22K GOLD -->
         <div class="rate-edit-row">
           <div class="rate-name-label">22K GOLD</div>
-          <div><input type="number" inputmode="numeric" id="input_gold22_sale" class="tv-input-box tv-focusable" placeholder="134750"></div>
+          <div><input type="number" inputmode="numeric" id="input_gold22_sale" class="tv-input-box tv-focusable" placeholder="130167"></div>
           <div><input type="number" inputmode="numeric" id="input_gold22_purchase" class="tv-input-box tv-focusable" placeholder="000000"></div>
         </div>
 
         <!-- 20K GOLD -->
         <div class="rate-edit-row">
           <div class="rate-name-label">20K GOLD</div>
-          <div><input type="number" inputmode="numeric" id="input_gold20_sale" class="tv-input-box tv-focusable" placeholder="122500"></div>
+          <div><input type="number" inputmode="numeric" id="input_gold20_sale" class="tv-input-box tv-focusable" placeholder="118333"></div>
           <div><input type="number" inputmode="numeric" id="input_gold20_purchase" class="tv-input-box tv-focusable" placeholder="000000"></div>
         </div>
 
         <!-- 18K GOLD -->
         <div class="rate-edit-row">
           <div class="rate-name-label">18K GOLD</div>
-          <div><input type="number" inputmode="numeric" id="input_gold18_sale" class="tv-input-box tv-focusable" placeholder="110250"></div>
+          <div><input type="number" inputmode="numeric" id="input_gold18_sale" class="tv-input-box tv-focusable" placeholder="106500"></div>
           <div><input type="number" inputmode="numeric" id="input_gold18_purchase" class="tv-input-box tv-focusable" placeholder="000000"></div>
         </div>
 
@@ -1536,15 +1536,15 @@ div[class*="Netlify"] {
 // Toggle to temporarily disable API and use fixed gold rates
 const USE_LIVE_MCX_API = false;
 
-// Default rates (6 digits format, e.g., 147000, 000000)
+// Default rates (6 digits format, e.g., 142000, 000000)
 const DEFAULT_RATES = {
-  gold24_sale: "147000",
+  gold24_sale: "142000",
   gold24_purchase: "000000",
-  gold22_sale: "134750",
+  gold22_sale: "130167",
   gold22_purchase: "000000",
-  gold20_sale: "122500",
+  gold20_sale: "118333",
   gold20_purchase: "000000",
-  gold18_sale: "110250",
+  gold18_sale: "106500",
   gold18_purchase: "000000",
   silver_sale: "002100",
   silver_purchase: "000000"
@@ -1707,10 +1707,10 @@ function loadRates() {
       currentRates.silver_sale = "002100";
     }
 
-    // Apply fixed 24K gold rate of 147000 and derive all other gold rates (do not touch silver)
+    // Apply fixed 24K gold rate of 142000 and derive all other gold rates (do not touch silver)
     if (!USE_LIVE_MCX_API) {
-      currentRates.gold24_sale = "147000";
-      const derived = computeDerivedGoldFrom24K("147000");
+      currentRates.gold24_sale = "142000";
+      const derived = computeDerivedGoldFrom24K("142000");
       currentRates.gold22_sale = derived.gold22_sale;
       currentRates.gold20_sale = derived.gold20_sale;
       currentRates.gold18_sale = derived.gold18_sale;
@@ -1822,9 +1822,9 @@ async function fetchLiveMCXRates(showToast = false) {
   const syncBtn = document.getElementById("syncMcxBtn");
 
   if (!USE_LIVE_MCX_API) {
-    // Keep fixed gold rates based on 147000, do not touch silver
-    currentRates.gold24_sale = "147000";
-    const derived = computeDerivedGoldFrom24K("147000");
+    // Keep fixed gold rates based on 142000, do not touch silver
+    currentRates.gold24_sale = "142000";
+    const derived = computeDerivedGoldFrom24K("142000");
     currentRates.gold22_sale = derived.gold22_sale;
     currentRates.gold20_sale = derived.gold20_sale;
     currentRates.gold18_sale = derived.gold18_sale;
@@ -1837,15 +1837,15 @@ async function fetchLiveMCXRates(showToast = false) {
     const modalStatusText = document.getElementById("modalMcxStatusText");
     const modalStatusTime = document.getElementById("modalMcxStatusTime");
     if (modalStatusBar) modalStatusBar.className = "modal-mcx-status-bar status-live";
-    if (modalStatusText) modalStatusText.innerHTML = "📌 Fixed Mode: 24K Gold @ ₹1,47,000 (API Paused)";
-    if (modalStatusTime) modalStatusTime.textContent = "Base: ₹1,47,000";
+    if (modalStatusText) modalStatusText.innerHTML = "📌 Fixed Mode: 24K Gold @ ₹1,42,000 (API Paused)";
+    if (modalStatusTime) modalStatusTime.textContent = "Base: ₹1,42,000";
 
     dismissMcxErrorPopup();
 
     if (showToast) {
-      showToastNotification("Fixed Mode: 24K Gold is set to ₹1,47,000", "warning");
+      showToastNotification("Fixed Mode: 24K Gold is set to ₹1,42,000", "warning");
     }
-    console.log("[Rate Engine] Fixed Mode: 24K Gold = 147000 (API paused). Derived gold rates applied:", currentRates);
+    console.log("[Rate Engine] Fixed Mode: 24K Gold = 142000 (API paused). Derived gold rates applied:", currentRates);
     return;
   }
 

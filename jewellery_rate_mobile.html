@@ -1482,28 +1482,28 @@ div[class*="Netlify"] {
         <!-- 24K GOLD -->
         <div class="rate-edit-row">
           <div class="rate-name-label">24K GOLD</div>
-          <div><input type="number" inputmode="numeric" id="input_gold24_sale" class="tv-input-box tv-focusable" placeholder="150700"></div>
+          <div><input type="number" inputmode="numeric" id="input_gold24_sale" class="tv-input-box tv-focusable" placeholder="147000"></div>
           <div><input type="number" inputmode="numeric" id="input_gold24_purchase" class="tv-input-box tv-focusable" placeholder="000000"></div>
         </div>
 
         <!-- 22K GOLD -->
         <div class="rate-edit-row">
           <div class="rate-name-label">22K GOLD</div>
-          <div><input type="number" inputmode="numeric" id="input_gold22_sale" class="tv-input-box tv-focusable" placeholder="138142"></div>
+          <div><input type="number" inputmode="numeric" id="input_gold22_sale" class="tv-input-box tv-focusable" placeholder="134750"></div>
           <div><input type="number" inputmode="numeric" id="input_gold22_purchase" class="tv-input-box tv-focusable" placeholder="000000"></div>
         </div>
 
         <!-- 20K GOLD -->
         <div class="rate-edit-row">
           <div class="rate-name-label">20K GOLD</div>
-          <div><input type="number" inputmode="numeric" id="input_gold20_sale" class="tv-input-box tv-focusable" placeholder="125583"></div>
+          <div><input type="number" inputmode="numeric" id="input_gold20_sale" class="tv-input-box tv-focusable" placeholder="122500"></div>
           <div><input type="number" inputmode="numeric" id="input_gold20_purchase" class="tv-input-box tv-focusable" placeholder="000000"></div>
         </div>
 
         <!-- 18K GOLD -->
         <div class="rate-edit-row">
           <div class="rate-name-label">18K GOLD</div>
-          <div><input type="number" inputmode="numeric" id="input_gold18_sale" class="tv-input-box tv-focusable" placeholder="113025"></div>
+          <div><input type="number" inputmode="numeric" id="input_gold18_sale" class="tv-input-box tv-focusable" placeholder="110250"></div>
           <div><input type="number" inputmode="numeric" id="input_gold18_purchase" class="tv-input-box tv-focusable" placeholder="000000"></div>
         </div>
 
@@ -1533,15 +1533,18 @@ div[class*="Netlify"] {
  * 100% Offline | Persistent LocalStorage | TV Remote D-Pad Navigation
  */
 
-// Default rates (6 digits format, e.g., 140000, 000000)
+// Toggle to temporarily disable API and use fixed gold rates
+const USE_LIVE_MCX_API = false;
+
+// Default rates (6 digits format, e.g., 147000, 000000)
 const DEFAULT_RATES = {
-  gold24_sale: "151600",
+  gold24_sale: "147000",
   gold24_purchase: "000000",
-  gold22_sale: "138967",
+  gold22_sale: "134750",
   gold22_purchase: "000000",
-  gold20_sale: "126333",
+  gold20_sale: "122500",
   gold20_purchase: "000000",
-  gold18_sale: "113700",
+  gold18_sale: "110250",
   gold18_purchase: "000000",
   silver_sale: "002100",
   silver_purchase: "000000"
@@ -1703,13 +1706,15 @@ function loadRates() {
     if (Number(currentRates.silver_sale) > 10000) {
       currentRates.silver_sale = "002100";
     }
-    // If gold24_sale is still the old 140000, update to 150700
-    if (currentRates.gold24_sale === "140000" || currentRates.gold24_sale === "074500") {
-      currentRates.gold24_sale = "150700";
-      const derived = computeDerivedGoldFrom24K("150700");
+
+    // Apply fixed 24K gold rate of 147000 and derive all other gold rates (do not touch silver)
+    if (!USE_LIVE_MCX_API) {
+      currentRates.gold24_sale = "147000";
+      const derived = computeDerivedGoldFrom24K("147000");
       currentRates.gold22_sale = derived.gold22_sale;
       currentRates.gold20_sale = derived.gold20_sale;
       currentRates.gold18_sale = derived.gold18_sale;
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(currentRates));
     }
   } catch (e) {
     console.warn("Could not load from localStorage, using defaults", e);
@@ -1815,6 +1820,35 @@ function updateMcxStatusUI(status, message, timeStr) {
 // Live MCX Fetcher with dual-strategy (Netlify Function + Direct Fallback)
 async function fetchLiveMCXRates(showToast = false) {
   const syncBtn = document.getElementById("syncMcxBtn");
+
+  if (!USE_LIVE_MCX_API) {
+    // Keep fixed gold rates based on 147000, do not touch silver
+    currentRates.gold24_sale = "147000";
+    const derived = computeDerivedGoldFrom24K("147000");
+    currentRates.gold22_sale = derived.gold22_sale;
+    currentRates.gold20_sale = derived.gold20_sale;
+    currentRates.gold18_sale = derived.gold18_sale;
+
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(currentRates));
+    renderAllRates();
+    updateModalInputs();
+
+    const modalStatusBar = document.getElementById("modalMcxStatusBar");
+    const modalStatusText = document.getElementById("modalMcxStatusText");
+    const modalStatusTime = document.getElementById("modalMcxStatusTime");
+    if (modalStatusBar) modalStatusBar.className = "modal-mcx-status-bar status-live";
+    if (modalStatusText) modalStatusText.innerHTML = "📌 Fixed Mode: 24K Gold @ ₹1,47,000 (API Paused)";
+    if (modalStatusTime) modalStatusTime.textContent = "Base: ₹1,47,000";
+
+    dismissMcxErrorPopup();
+
+    if (showToast) {
+      showToastNotification("Fixed Mode: 24K Gold is set to ₹1,47,000", "warning");
+    }
+    console.log("[Rate Engine] Fixed Mode: 24K Gold = 147000 (API paused). Derived gold rates applied:", currentRates);
+    return;
+  }
+
   if (syncBtn) {
     syncBtn.disabled = true;
     syncBtn.textContent = "⏳ SYNCING...";
@@ -2199,9 +2233,11 @@ function initApp() {
   requestScreenWakeLock();
   initBurnInProtection();
 
-  // Fetch live MCX rates on startup & auto-refresh every 10 minutes
+  // Fetch live MCX rates on startup & auto-refresh every 10 minutes (only if API active)
   fetchLiveMCXRates(false);
-  setInterval(() => fetchLiveMCXRates(false), 10 * 60 * 1000);
+  if (USE_LIVE_MCX_API) {
+    setInterval(() => fetchLiveMCXRates(false), 10 * 60 * 1000);
+  }
   
   if (window.location.hash === '#admin') {
     setTimeout(openModal, 150);

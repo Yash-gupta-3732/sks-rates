@@ -6,15 +6,15 @@
 
 // Default rates (6 digits format, e.g., 140000, 000000)
 const DEFAULT_RATES = {
-  gold24_sale: "147922",
+  gold24_sale: "142150",
   gold24_purchase: "000000",
-  gold22_sale: "135595",
+  gold22_sale: "130304",
   gold22_purchase: "000000",
-  gold20_sale: "123268",
+  gold20_sale: "118458",
   gold20_purchase: "000000",
-  gold18_sale: "110942",
+  gold18_sale: "106613",
   gold18_purchase: "000000",
-  silver_sale: "001924",
+  silver_sale: "001765",
   silver_purchase: "000000"
 };
 
@@ -145,15 +145,15 @@ function computeDerivedGoldFrom24K(gold24Price) {
   };
 }
 
-// Silver sale rate formula for 10 grams: (MCX Silver 10g - 250) (no roundoff)
+// Silver sale rate formula for 10 grams: MCX Silver 10g - 10% (no roundoff)
 function computeSilverSaleRate(mcxSilver) {
   let s = Number(mcxSilver);
-  if (!s || isNaN(s)) return "002076";
+  if (!s || isNaN(s)) return "001765";
   // If a 1kg price (> 10000) was passed, normalize to 10g
   if (s > 10000) {
     s = s / 100;
   }
-  const rate10g = Math.round(s - 250);
+  const rate10g = Math.round(s * 0.90);
   return String(Math.max(0, rate10g)).padStart(6, '0');
 }
 
@@ -170,9 +170,9 @@ function loadRates() {
         currentRates[pKey] = "000000";
       }
     });
-    // If silver_sale is an old 1kg rate (> 10000), update it to 10g rate
-    if (Number(currentRates.silver_sale) > 10000) {
-      currentRates.silver_sale = "001924";
+    // If silver_sale is an old rate, update it to current default rate
+    if (['001924', '002100', '002076'].includes(currentRates.silver_sale) || Number(currentRates.silver_sale) > 10000) {
+      currentRates.silver_sale = DEFAULT_RATES.silver_sale;
     }
     // Purge old fixed test rates (142000, 147000, 140000, 150700, 151600, 074500)
     if (['142000', '147000', '140000', '150700', '151600', '074500'].includes(currentRates.gold24_sale)) {
@@ -350,7 +350,7 @@ async function fetchLiveMCXRates(showToast = false) {
       const gold24 = Math.round((goldUsd / 31.1034768) * 10 * usdinr * 1.136);
       const rawSilver10g = (silverUsd / 31.1034768) * 10 * usdinr;
       const silver10g = Math.round(rawSilver10g * 1.21);
-      const silverSale = Math.round(silver10g - 250);
+      const silverSale = Math.round(silver10g * 0.90);
       data = { gold24, silver10g, silver: silver10g * 100, silverSale, source: "spot_client_fallback" };
     }
 

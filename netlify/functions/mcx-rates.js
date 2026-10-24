@@ -49,7 +49,7 @@ exports.handler = async function(event, context) {
       const gold24 = Math.round(parseFloat(goldMatch[1]));
       const silverKg = parseFloat(silverMatch[1]);
       const silver10g = Math.round(silverKg / 100);
-      const silverSale10g = Math.round(silver10g - 250);
+      const silverSale10g = Math.round(silver10g * 0.90);
 
       const payload = {
         success: true,
@@ -98,7 +98,7 @@ exports.handler = async function(event, context) {
 
     const rawSilver10g = (silverUsd / 31.1034768) * 10 * usdinr;
     const silver10g = Math.round(rawSilver10g * 1.21);
-    const silverSale10g = Math.round(silver10g - 250);
+    const silverSale10g = Math.round(silver10g * 0.90);
 
     const payload = {
       success: true,
@@ -132,7 +132,7 @@ exports.handler = async function(event, context) {
       gold22: 138875,
       gold20: 126250,
       gold18: 113625,
-      silverSale: 2100,
+      silverSale: 2115,
       fallback: true,
       updatedAt: new Date().toISOString()
     };

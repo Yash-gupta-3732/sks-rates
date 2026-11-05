@@ -126,13 +126,13 @@ exports.handler = async function(event, context) {
     const fallback = cachedData || {
       success: true,
       source: "static_fallback",
-      gold24: 151500,
-      silver10g: 2350,
-      silver: 235000,
-      gold22: 138875,
-      gold20: 126250,
-      gold18: 113625,
-      silverSale: 2350,
+      gold24: 147200,
+      silver10g: 1930,
+      silver: 193000,
+      gold22: 134933,
+      gold20: 122667,
+      gold18: 110400,
+      silverSale: 1930,
       fallback: true,
       updatedAt: new Date().toISOString()
     };
